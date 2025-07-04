@@ -24,8 +24,8 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 	const pathname = usePathname();
 
 	return (
-		<div className="w-80 bg-green-500 rounded-[3rem] p-8 flex flex-col m-6">
-			<div className="flex-1">
+		<div className="fixed m-6 w-80 h-[calc(100vh-3rem)] bg-green-500 rounded-[3rem] p-8 flex flex-col justify-between z-50">
+			<div>
 				<h2 className="text-2xl font-bold text-black mb-16">
 					<AccountCircleRounded fontSize="large" className="mr-5"/>
 					{username ? `Hello, ${username}!` : "Hello!"}
