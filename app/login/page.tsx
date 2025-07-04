@@ -20,9 +20,9 @@ export default async function LoginPage() {
 
 	return (
 		<form action={loginAction}>
-			<Card className="w-full max-w-sm">
+			<Card className="min-w-xs max-w-sm mx-auto mt-20">
 				<CardHeader>
-					<CardTitle>Login to your account</CardTitle>
+					<CardTitle className="text-center text-xl">Đăng nhập</CardTitle>
 				</CardHeader>
 				<CardContent>
 					<div className="flex flex-col gap-6">
