@@ -28,7 +28,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 			<body>
 				<div className="flex min-h-screen bg-gray-50">
 					<SideBar isSignIn={isSignedIn} username={ username ? username : ""}/>
-					<main className="flex-1 ml-64">
+					<main className="flex-1 ml-[22rem] overflow-y-auto p-6 flex justify-center items-center">
 						{children}
 					</main>
 				</div>
