@@ -1,6 +1,7 @@
 import "@/app/globals.css";
 
 import { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next"
 import { cookies } from "next/headers";
 import SideBar from "./components/SideBar";
 import { APIHandler } from "@/lib/APIHandler";
@@ -32,6 +33,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 						{children}
 					</main>
 				</div>
+				<Analytics />
 			</body>
 		</html>
 	);
