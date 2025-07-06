@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "./components/PasswordInput";
 
 export default async function LoginPage() {
 	const token = (await cookies()).get("accessToken")?.value;
@@ -40,7 +41,7 @@ export default async function LoginPage() {
 							<div className="flex items-center">
 								<Label htmlFor="password">Password</Label>
 							</div>
-							<Input name="password" id="password" type="password" required />
+							<PasswordInput />
 						</div>
 					</div>
 				</CardContent>
