@@ -53,7 +53,7 @@ export function LoginForm() {
 								<Label htmlFor="password">Password</Label>
 							</div>
 							<PasswordInput disabled={isPending} />
-							{error && (
+							{error && !isPending && (
 								<p className="text-red-500 text-sm">
 									{error}
 								</p>
