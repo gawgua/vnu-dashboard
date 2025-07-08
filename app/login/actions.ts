@@ -20,10 +20,10 @@ export async function loginAction(formData: FormData): Promise<void> {
 			maxAge: 60 * 60, // 1 hour
 			httpOnly: true,
 		});
-
-		redirect("/");
 	} catch (error) {
 		console.error("Login failed:", error);
-		throw new Error();
+		throw new Error("Login failed");
 	}
+	
+	redirect("/");
 }
