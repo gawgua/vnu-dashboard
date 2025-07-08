@@ -35,6 +35,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 						<>
 							<div className="text-xl font-semibold text-black cursor-pointer">
 								<Link
+									prefetch={true}
 									key={route.href}
 									href={route.href}
 									className={cn(

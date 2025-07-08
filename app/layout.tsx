@@ -1,10 +1,12 @@
 import "@/app/globals.css";
 
 import { Metadata } from "next";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import { cookies } from "next/headers";
 import SideBar from "./components/SideBar";
 import { APIHandler } from "@/lib/APIHandler";
+import { Suspense } from "react";
+import Loading from "./loading";
 
 export const metadata: Metadata = {
 	title: "VNU Dashboard",
@@ -28,9 +30,11 @@ export default async function Layout({ children }: { children: React.ReactNode }
 		<html lang="vi">
 			<body>
 				<div className="flex min-h-screen bg-gray-50">
-					<SideBar isSignIn={isSignedIn} username={ username ? username : ""}/>
+					<SideBar isSignIn={isSignedIn} username={username ? username : ""} />
 					<main className="flex-1 ml-[22rem] overflow-y-auto p-6 flex justify-center items-center">
-						{children}
+						<Suspense fallback={<Loading />}>
+							{children}
+						</Suspense>
 					</main>
 				</div>
 				<Analytics />
