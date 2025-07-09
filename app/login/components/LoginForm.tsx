@@ -23,7 +23,7 @@ export function LoginForm() {
 		startTransition(async () => {
 			try {
 				await loginAction(formData);
-			} catch (err) {
+			} catch {
 				setError("Sai tài khoản hoặc mật khẩu");
 			}
 		});
