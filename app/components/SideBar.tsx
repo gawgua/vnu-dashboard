@@ -32,24 +32,22 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 				</h2>
 				<div className="space-y-8">
 					{routes.map((route) => (
-						<>
-							<div className="text-xl font-semibold text-black cursor-pointer">
-								<Link
-									prefetch={true}
-									key={route.href}
-									href={route.href}
-									className={cn(
-										"block px-3 py-2 rounded-md text-sm font-medium transition-colors",
-										pathname === route.href
-										? "bg-primary text-white"
-										: "hover:bg-muted"
-									)}
-									>
-									<route.icon key={route.href + "-icon"} className="mr-5" />
-									{route.label}
-								</Link>
-							</div>
-						</>
+						<div key={route.href.replace("/", "")} className="text-xl font-semibold text-black cursor-pointer">
+							<Link
+								prefetch={true}
+								key={route.href}
+								href={route.href}
+								className={cn(
+									"block px-3 py-2 rounded-md text-sm font-medium transition-colors",
+									pathname === route.href
+									? "bg-primary text-white"
+									: "hover:bg-muted"
+								)}
+								>
+								<route.icon key={route.href + "-icon"} className="mr-5" />
+								{route.label}
+							</Link>
+						</div>
 					))}
 				</div>
 			</div>
