@@ -1,6 +1,6 @@
 "use client";
 
-import { ShowPasswordButton } from "./ShowPasswordButton";
+import ShowPasswordButton from "./ShowPasswordButton";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
@@ -8,7 +8,7 @@ interface PasswordInputProps {
 	disabled?: boolean;
 }
 
-export function PasswordInput({ disabled }: PasswordInputProps) {
+export default function PasswordInput({ disabled }: PasswordInputProps) {
 	const [showPassword, setShowPassword] = useState(false);
 
 	return (

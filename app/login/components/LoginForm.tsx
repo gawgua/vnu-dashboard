@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PasswordInput } from "./PasswordInput";
+import PasswordInput from "./PasswordInput";
 
-export function LoginForm() {
+export default function LoginForm() {
 	const [error, setError] = useState<string | null>(null);
 	const [isPending, startTransition] = useTransition();
 

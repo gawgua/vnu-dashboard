@@ -8,7 +8,7 @@ interface ShowPasswordProps {
 	onToggle: (showPassword: boolean) => void;
 }
 
-export function ShowPasswordButton({ onToggle }: ShowPasswordProps) {
+export default function ShowPasswordButton({ onToggle }: ShowPasswordProps) {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const togglePassword = () => {
