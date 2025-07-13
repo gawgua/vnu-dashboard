@@ -2,7 +2,7 @@ import { APIHandler } from "@/lib/APIHandler";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import ThoiKhoaBieu from "./components/ThoiKhoaBieu";
+import Schedule from "./components/Schedule";
 
 export interface ThoiKhoaBieuTheoHocKy {
 	id: string;
@@ -33,5 +33,5 @@ export default async function SchedulePage() {
 
 	tkbTheoHocKy.sort((a, b) => -(Number(a.id) - Number(b.id)));
 
-	return <ThoiKhoaBieu data={tkbTheoHocKy} />;
+	return <Schedule data={tkbTheoHocKy} />;
 }
