@@ -20,7 +20,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 	return (
 		<div className="w-full space-y-4">
 			<Select onValueChange={setSelectedId}>
-				<SelectTrigger className="w-full">
+				<SelectTrigger className="w-full bg-white">
 					<SelectValue placeholder="Chọn học kỳ" />
 				</SelectTrigger>
 				<SelectContent>

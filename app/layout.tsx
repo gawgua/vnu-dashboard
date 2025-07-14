@@ -29,7 +29,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 	return (
 		<html lang="vi">
 			<body>
-				<div className="flex min-h-screen bg-gray-50">
+				<div className="flex min-h-screen bg-background">
 					<SideBar isSignIn={isSignedIn} username={username ? username : ""} />
 					<main className="flex-1 ml-[22rem] overflow-y-auto p-6 flex justify-center items-center">
 						<Suspense fallback={<Loading />}>

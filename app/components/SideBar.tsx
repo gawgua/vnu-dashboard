@@ -24,7 +24,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 	const pathname = usePathname();
 
 	return (
-		<div className="fixed m-6 w-80 h-[calc(100vh-3rem)] bg-green-500 rounded-[3rem] p-8 flex flex-col justify-between z-50">
+		<div className="fixed m-6 w-80 h-[calc(100vh-3rem)] bg-primary rounded-[3rem] p-8 flex flex-col justify-between z-50">
 			<div>
 				<h2 className="text-2xl font-bold text-black mb-16">
 					<AccountCircleRounded fontSize="large" className="mr-5"/>
@@ -40,7 +40,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 								className={cn(
 									"block px-3 py-2 rounded-md text-sm font-medium transition-colors",
 									pathname === route.href
-									? "bg-primary text-white"
+									? "bg-accent text-white"
 									: "hover:bg-muted"
 								)}
 								>
