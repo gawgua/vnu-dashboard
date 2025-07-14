@@ -32,7 +32,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 				</SelectContent>
 			</Select>
 			{selectedId && (
-				<ScrollArea className="h-[calc(100vh-8rem)] w-full rounded-3xl">
+				<ScrollArea className="h-[calc(100vh-7rem)] w-full rounded-3xl">
 					<Timetable data={currentHocKy.thoiKhoaBieu}/>
 				</ScrollArea>
 			)}
