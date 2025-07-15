@@ -3,7 +3,6 @@
 import { Label } from "@/components/ui/label";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import SubjectCard from "./SubjectCard";
-import { start } from "repl";
 
 export interface EventInfo {
 	event: ThoiKhoaBieuResponse;
