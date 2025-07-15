@@ -3,6 +3,7 @@
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { Card, CardContent } from "@/components/ui/card";
 import { EventInfo } from "./Timetable";
+import SubjectPopup from "./SubjectPopup";
 
 function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: string } {
 	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc));
@@ -66,23 +67,25 @@ export default function SubjectCard({ eventInfo }: { eventInfo: EventInfo }) {
 	};
 
 	return (
-		<Card
-		key={`${eventInfo.event.maHocPhan}-${eventInfo.event.ngayTrongTuan}-${eventInfo.event.tietBatDau}`}
-		className={cardClassName}
-		style={cardStyle}
-		>
-			<CardContent className="p-2 h-full flex flex-col justify-start overflow-hidden">
-				<div className="text-white text-xs font-medium leading-tight">
-				<div className="mb-1">{eventInfo.event.tenHocPhan + ` (${(eventInfo.event.nhom == "0" ? "CL" : `Nhóm ${eventInfo.event.nhom}`)})`}</div>
-				<div className="opacity-90 truncate">
-					{(() => {
-						const { startTime, endTime } = getPeriodTime(Number.parseInt(eventInfo.event.tietBatDau),	Number.parseInt(eventInfo.event.tietKetThuc));
-						return `${startTime} - ${endTime}`;
-					})()}
-				</div>
-				<div className="opacity-90 truncate">{eventInfo.event.tenPhong}</div>
-				</div>
-			</CardContent>
-		</Card>
+		<SubjectPopup subject={eventInfo.event}>
+			<Card
+			key={`${eventInfo.event.maHocPhan}-${eventInfo.event.ngayTrongTuan}-${eventInfo.event.tietBatDau}`}
+			className={cardClassName}
+			style={cardStyle}
+			>
+				<CardContent className="p-2 h-full flex flex-col justify-start overflow-hidden">
+					<div className="text-white text-xs font-medium leading-tight text-left">
+						<div className="mb-1">{eventInfo.event.tenHocPhan + ` (${(eventInfo.event.nhom == "0" ? "CL" : `Nhóm ${eventInfo.event.nhom}`)})`}</div>
+						<div className="opacity-90 truncate">
+							{(() => {
+								const { startTime, endTime } = getPeriodTime(Number.parseInt(eventInfo.event.tietBatDau),	Number.parseInt(eventInfo.event.tietKetThuc));
+								return `${startTime} - ${endTime}`;
+							})()}
+						</div>
+						<div className="opacity-90 truncate">{eventInfo.event.tenPhong}</div>
+					</div>
+				</CardContent>
+			</Card>
+		</SubjectPopup>
 	)
 }
