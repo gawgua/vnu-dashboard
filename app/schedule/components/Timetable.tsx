@@ -1,11 +1,16 @@
 "use client";
 
-import {
-	Card,
-	CardContent,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
+import SubjectCard from "./SubjectCard";
+import { start } from "repl";
+
+export interface EventInfo {
+	event: ThoiKhoaBieuResponse;
+	isOverlapped: boolean;
+	isMainOverlap: boolean;
+	isSameTime: boolean;
+}
 
 const days = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "CN"];
 const timeSlots = [
@@ -24,21 +29,6 @@ const timeSlots = [
 	"18:00",
 	"19:00",
 ];
-const periodToTime = [
-	{ start: "07:00", end: "07:50" },
-	{ start: "07:55", end: "08:45" },
-	{ start: "08:50", end: "09:40" },
-	{ start: "09:50", end: "10:40" },
-	{ start: "10:45", end: "11:35" },
-	{ start: "11:40", end: "12:30" },
-	{ start: "13:00", end: "13:50" },
-	{ start: "13:55", end: "14:45" },
-	{ start: "14:50", end: "15:40" },
-	{ start: "15:50", end: "16:40" },
-	{ start: "16:45", end: "17:35" },
-	{ start: "17:40", end: "18:30" },
-	{ start: "18:35", end: "19:25" },
-];
 
 function getCurrDayOfWeek(): number {
 	const today = new Date();
@@ -47,36 +37,93 @@ function getCurrDayOfWeek(): number {
 	return day === 0 ? 7 : day;
 } 
 
-function getPeriodTime(start: number, end: number): { startTime: string; endTime: string } {
-	return {
-		startTime: periodToTime[start - 1].start,
-		endTime: periodToTime[end - 1].end,
+function detectOverlaps(events: ThoiKhoaBieuResponse[]): EventInfo[] {
+	const result: EventInfo[] = [];
+	
+	for (let i = 0; i < events.length; i++) {
+		const event1 = events[i];
+		const start1 = Number.parseInt(event1.tietBatDau);
+		const end1 = Number.parseInt(event1.tietKetThuc);
+		
+		let hasOverlap = false;
+		let isMainOverlap = true;
+		let isSameTime = false;
+		
+		// Find all overlapping events
+		const overlappingEvents: { index: number; event: ThoiKhoaBieuResponse; duration: number; isSameTime: boolean }[] = [];
+		
+		for (let j = 0; j < events.length; j++) {
+			if (i === j) continue;
+			
+			const event2 = events[j];
+			const start2 = Number.parseInt(event2.tietBatDau);
+			const end2 = Number.parseInt(event2.tietKetThuc);
+			
+			// Check if events have exactly the same start and end time
+			if (start1 === start2 && end1 === end2) {
+				hasOverlap = true;
+				isSameTime = true;
+				const duration2 = end2 - start2;
+				overlappingEvents.push({ index: j, event: event2, duration: duration2, isSameTime: true });
+			}
+			// Check if events overlap (but not same time)
+			else if (start1 <= end2 && start2 <= end1) {
+				hasOverlap = true;
+				const duration2 = end2 - start2;
+				overlappingEvents.push({ index: j, event: event2, duration: duration2, isSameTime: false });
+			}
+		}
+		
+		if (hasOverlap && overlappingEvents.length > 0) {
+			const duration1 = end1 - start1;
+			
+			// Check if any overlapping event has the same time
+			const hasSameTimeOverlap = overlappingEvents.some(e => e.isSameTime);
+			
+			if (hasSameTimeOverlap) {
+				// For same time events, use side-by-side layout
+				// First event in array order goes to the left (isMainOverlap = false)
+				const sameTimeEvents = overlappingEvents.filter(e => e.isSameTime);
+				const firstSameTimeIndex = Math.min(...sameTimeEvents.map(e => e.index));
+				isMainOverlap = i > firstSameTimeIndex; // Later event goes to the right
+				isSameTime = true;
+			} else {
+				// For different duration overlaps, use stacked layout
+				// Sort overlapping events by duration (shortest first) then by original index
+				overlappingEvents.sort((a, b) => {
+					if (a.duration !== b.duration) {
+						return a.duration - b.duration;
+					}
+					return a.index - b.index;
+				});
+				
+				// Current event gets left side if it's shorter than the shortest overlapping event
+				// or if it has same duration but comes first in the original array
+				const shortestOverlap = overlappingEvents[0];
+				if (duration1 < shortestOverlap.duration || 
+					(duration1 === shortestOverlap.duration && i < shortestOverlap.index)) {
+					isMainOverlap = false; // This event goes to the left
+				} else {
+					isMainOverlap = true; // This event stays on the right
+				}
+			}
+		}
+		
+		result.push({
+			event: event1,
+			isOverlapped: hasOverlap,
+			isMainOverlap: isMainOverlap,
+			isSameTime: isSameTime
+		});
 	}
+	
+	return result;
 }
-
-function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: string } {
-	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc));
-
-	const startHour = Number.parseInt(startTime.split(":")[0]);
-	const startMinute = Number.parseInt(startTime.split(":")[1]);
-	const endHour = Number.parseInt(endTime.split(":")[0]);
-	const endMinute = Number.parseInt(endTime.split(":")[1]);
-
-	const startPosition = ((startHour - 6) * 60 + startMinute) / 60;
-	const duration =
-		((endHour - 6) * 60 + endMinute - (startHour - 6) * 60 - startMinute) /
-		60;
-
-	return {
-		top: `${startPosition * 60}px`,
-		height: `${duration * 60}px`,
-	};
-}
-
 
 export default function Timetable({data}: {data: ThoiKhoaBieuResponse[]}) {
-	function getEventsForDay(day: number) {
-		return data.filter(event => Number.parseInt(event.ngayTrongTuan) === day);
+	function getEventsForDay(day: number): EventInfo[] {
+		const dayEvents = data.filter(event => Number.parseInt(event.ngayTrongTuan) === day);
+		return detectOverlaps(dayEvents);
 	}
 
 	return (
@@ -105,33 +152,11 @@ export default function Timetable({data}: {data: ThoiKhoaBieuResponse[]}) {
 						<div key={`${day}-${time}`} className="border-r border-t border-gray-200 relative min-h-[60px]">
 							{timeIndex === 0 && (
 							<div className="absolute inset-0 overflow-visible">
-								{getEventsForDay(dayIndex + 1).map((event) => {
-								const position = getEventPosition(event)
-								return (
-									<Card
-									key={`${event.maHocPhan}-${event.ngayTrongTuan}-${event.tietBatDau}`}
-									className="absolute left-1 right-1 bg-primary border-0 shadow-sm z-10 py-0"
-									style={{
-										top: position.top,
-										height: position.height,
-										minHeight: "80px",
-									}}
-									>
-										<CardContent className="p-2 h-full flex flex-col justify-start">
-											<div className="text-white text-xs font-medium leading-tight">
-											<div className="mb-1">{event.tenHocPhan}</div>
-											<div className="opacity-90">
-												{(() => {
-													const { startTime, endTime } = getPeriodTime(Number.parseInt(event.tietBatDau),	Number.parseInt(event.tietKetThuc));
-													return `${startTime} - ${endTime}`;
-												})()}
-											</div>
-											<div className="opacity-90">{event.tenPhong}</div>
-											</div>
-										</CardContent>
-									</Card>
-								)
-								})}
+								{getEventsForDay(dayIndex + 1).map((overlapInfo) => 
+									<SubjectCard 
+									key={`${overlapInfo.event.maHocPhan}-${overlapInfo.event.ngayTrongTuan}-${overlapInfo.event.tietBatDau}`} 
+									eventInfo={overlapInfo} />
+								)}
 							</div>
 							)}
 						</div>
