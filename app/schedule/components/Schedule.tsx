@@ -8,7 +8,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ThoiKhoaBieuTheoHocKy } from "../page";
 import Timetable from "./Timetable";
 
@@ -32,7 +32,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 				</SelectContent>
 			</Select>
 			{selectedId && (
-				<ScrollArea className="h-[calc(100vh-7rem)] w-full rounded-3xl">
+				<ScrollArea className="h-[calc(100vh-7rem)] w-full rounded-3xl [&>[data-slot=scroll-area-scrollbar]]:hidden">
 					<Timetable data={currentHocKy.thoiKhoaBieu}/>
 				</ScrollArea>
 			)}
