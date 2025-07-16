@@ -39,7 +39,7 @@ const periodToTime = [
 	{ start: "17:40", end: "18:30" },
 	{ start: "18:35", end: "19:25" },
 ];
-function getPeriodTime(start: number, end: number): { startTime: string; endTime: string } {
+export function getPeriodTime(start: number, end: number): { startTime: string; endTime: string } {
 	return {
 		startTime: periodToTime[start - 1].start,
 		endTime: periodToTime[end - 1].end,
