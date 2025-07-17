@@ -44,7 +44,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = "thoikhoabieu.ics";
+			link.download = `thoikhoabieu_${currentHocKy.id}.ics`;
 			document.body.appendChild(link);
 			link.click();
 			URL.revokeObjectURL(link.href);
