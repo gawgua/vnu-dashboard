@@ -1,6 +1,13 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { APIHandler } from "@/lib/APIHandler";
+import { 
+	Card, 
+	CardTitle,
+	CardContent
+} from "@/components/ui/card";
+import ExamList from "./components/ExamList";
+import { Label } from "@/components/ui/label";
 
 export default async function ExamPage() {
 	const token = (await cookies()).get("accessToken")?.value;
@@ -11,39 +18,36 @@ export default async function ExamPage() {
 	
 	const apiHandler = new APIHandler(token, refreshToken);
 	const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoLichThi();
-	const lichThiTheoHocKy = [];
-	for (const hocKy of danhSachHocKy) {
-		const lichThi = await apiHandler.getLichThiHocKy(hocKy.id);
-		if (lichThi.length > 0) {
-			lichThiTheoHocKy.push({
-				id: hocKy.id,
-				tenHocKy: `Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`,
-				lichThi: lichThi,
-			});
-		}
-	}
+	const hocKy = danhSachHocKy.reduce((prev, curr) => {
+		return curr.id > prev.id ? curr : prev;
+	}, danhSachHocKy[0]);
+	const lichThi = await apiHandler.getLichThiHocKy(hocKy.id);
+	const lichThiGroups = Object.groupBy(lichThi, (item) => {
+		if (item.ngayThi === null) return "upcoming";
 
-	lichThiTheoHocKy.sort((a, b) => -(Number(a.id) - Number(b.id)));
+		const now = new Date();
+		const examDate = new Date(item.ngayThi.split("/").reverse().join("-"));
+		if (examDate < now) return "past";
+		else return "upcoming";
+	});
 
 	return (
-		<div>
-			<h1>Lịch thi</h1>
-			{lichThiTheoHocKy.length > 0 ? (
-				lichThiTheoHocKy.map((hocKy) => (
-					<div key={hocKy.id}>
-						<h2>{hocKy.tenHocKy}</h2>
-						<ul>
-							{hocKy.lichThi.map((lichThi) => (
-								<li key={lichThi.idLichThi}>
-									{lichThi.tenHocPhan} - {lichThi.ngayThi} {lichThi.gioBatDauThi}
-								</li>
-							))}
-						</ul>
-					</div>
-				))
-			) : (
-				<p>Không có lịch thi cho học kỳ này.</p>
-			)}
+		<div className="w-full space-y-4">
+			<Card>
+				<CardTitle className="text-2xl font-bold p-6 pb-2 pt-0.5">
+					Lịch Thi {`Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`}
+				</CardTitle>
+				<CardContent>
+					<Label className="mb-0.5">Sắp thi:</Label>
+					{lichThiGroups["upcoming"] && (
+					<ExamList data={lichThiGroups["upcoming"]} className="m-3"/>
+					)}
+					<Label className="mt-5 mb-0.5">Đã thi:</Label>
+					{lichThiGroups["past"] && (
+					<ExamList data={lichThiGroups["past"]} className="m-3"/>
+					)}
+				</CardContent>
+			</Card>
 		</div>
 	);
 }
