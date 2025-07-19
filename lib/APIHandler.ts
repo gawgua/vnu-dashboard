@@ -121,7 +121,7 @@ export class APIHandler {
 		idNganhDaoTao: string,
 		idNienKhoaDaoTao: string,
 		idChuongTrinhDaoTao: string
-	): Promise<LopDaoTaoResponse> {
+	): Promise<LopDaoTaoResponse[]> {
 		const getCachedLopDaoTao = unstable_cache(
 			async (token: string,
 				_id: string,
