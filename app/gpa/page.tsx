@@ -6,8 +6,9 @@ import { APIHandler } from "@/lib/APIHandler";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { DiemHocPhanResponse } from "@/types/ResponseTypes";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-export default async function SchedulePage() {
+export default async function GPAPage() {
 	const token = (await cookies()).get("accessToken")?.value;
 	const refreshToken = (await cookies()).get("refreshToken")?.value;
 	if (!token) {
@@ -62,16 +63,23 @@ export default async function SchedulePage() {
 							<TableBody>
 								{hocKy.diemHocKy.map((monHoc) => (
 								<Dialog key={monHoc.maHocPhan}>
-									<DialogTrigger asChild className="cursor-pointer">
-										<TableRow>
-											<TableCell>{monHoc.maHocPhan}</TableCell>
-											<TableCell>{monHoc.tenHocPhan}</TableCell>
-											<TableCell>{monHoc.soTinChi}</TableCell>
-											<TableCell>{monHoc.diemHe10}</TableCell>
-											<TableCell>{monHoc.diemHe4}</TableCell>
-											<TableCell>{monHoc.diemHeChu}</TableCell>
-										</TableRow>
-									</DialogTrigger>
+									<Tooltip delayDuration={700}>
+										<TooltipTrigger asChild>
+											<DialogTrigger asChild>
+												<TableRow className="cursor-pointer">
+													<TableCell>{monHoc.maHocPhan}</TableCell>
+													<TableCell>{monHoc.tenHocPhan}</TableCell>
+													<TableCell>{monHoc.soTinChi}</TableCell>
+													<TableCell>{monHoc.diemHe10}</TableCell>
+													<TableCell>{monHoc.diemHe4}</TableCell>
+													<TableCell>{monHoc.diemHeChu}</TableCell>
+												</TableRow>
+											</DialogTrigger>
+										</TooltipTrigger>
+										<TooltipContent>
+											Ấn để xem chi tiết
+										</TooltipContent>
+									</Tooltip>
 									<DialogContent>
 										<DialogTitle>Điểm chi tiết</DialogTitle>
 										{subjectDetails[monHoc.maHocPhan].map((detail) => (
