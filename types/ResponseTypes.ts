@@ -4,6 +4,7 @@ export interface SigninResponse {
 }
 
 export interface SinhVienResponse {
+	// This is shortened what necessary for the context
     maSinhVien: string;
     hoVaTen: string;
     gioiTinh: string;
@@ -16,6 +17,18 @@ export interface SinhVienResponse {
     idNienKhoaDaoTao: string;
 }
 
+export interface LopDaoTaoResponse {
+    id: string;
+    ten: string;
+	guidDonVi: string | null;
+    idBacDaoTao: string;
+    idChuongTrinhDaoTao: string;
+    idHeDaoTao: string;
+    idNganhDaoTao: string;
+    idNienKhoaDaoTao: string;
+    kieuLopDaoTao: string | null;
+    tenVietTat: string;
+}
 export interface DanhSachHocKyResponse {
 	id: string;
 	ten: string;
