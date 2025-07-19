@@ -62,7 +62,7 @@ export default async function SchedulePage() {
 							<TableBody>
 								{hocKy.diemHocKy.map((monHoc) => (
 								<Dialog key={monHoc.maHocPhan}>
-									<DialogTrigger asChild>
+									<DialogTrigger asChild className="cursor-pointer">
 										<TableRow>
 											<TableCell>{monHoc.maHocPhan}</TableCell>
 											<TableCell>{monHoc.tenHocPhan}</TableCell>
