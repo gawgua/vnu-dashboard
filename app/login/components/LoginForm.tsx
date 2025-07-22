@@ -6,12 +6,18 @@ import { Button } from "@/components/ui/button";
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Alert,
+	AlertDescription,
+} from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { BadgeInfo } from "lucide-react";
 import PasswordInput from "./PasswordInput";
 
 export default function LoginForm() {
@@ -30,36 +36,47 @@ export default function LoginForm() {
 	};
 
 	return (
-		<form action={handleSubmit}>
-			<Card className="min-w-xs max-w-sm mx-auto mt-20">
+		<Card className="min-w-1/2 max-w-max mx-auto mt-20">
 				<CardHeader>
 					<CardTitle className="text-center text-xl">Đăng nhập</CardTitle>
+					<CardDescription>
+						<Alert className="mt-2 w-full bg-yellow-200/50 border-yellow-300">
+							<BadgeInfo color="#ffb900" strokeWidth={2.5} />
+							<AlertDescription className="text-amber-400 font-medium">
+								Đăng nhập bằng tài khoản OneVNU (idp.vnu.edu.vn) của bạn.
+								<br />
+								Hệ thống không có chức năng lưu lại thông tin đăng nhập.
+							</AlertDescription>
+						</Alert>
+					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<div className="flex flex-col gap-6">
-						<div className="grid gap-2">
-							<Label htmlFor="username">Mã sinh viên</Label>
-							<Input
-								name="username"
-								id="username"
-								type="text"
-								placeholder="240*****"
-								required
-								disabled={isPending}
-							/>
-						</div>
-						<div className="grid gap-2">
-							<div className="flex items-center">
-								<Label htmlFor="password">Password</Label>
+					<form action={handleSubmit}>
+						<div className="flex flex-col gap-6">
+							<div className="grid gap-2">
+								<Label htmlFor="username">Mã sinh viên</Label>
+								<Input
+									name="username"
+									id="username"
+									type="text"
+									placeholder="240*****"
+									required
+									disabled={isPending}
+								/>
 							</div>
-							<PasswordInput disabled={isPending} />
-							{error && !isPending && (
-								<p className="text-red-500 text-sm">
-									{error}
-								</p>
-							)}
+							<div className="grid gap-2">
+								<div className="flex items-center">
+									<Label htmlFor="password">Password</Label>
+								</div>
+								<PasswordInput disabled={isPending} />
+								{error && !isPending && (
+									<p className="text-red-500 text-sm">
+										{error}
+									</p>
+								)}
+							</div>
 						</div>
-					</div>
+					</form>
 				</CardContent>
 				<CardFooter className="flex-col gap-2">
 					<Button type="submit" className="w-full" disabled={isPending}>
@@ -67,6 +84,5 @@ export default function LoginForm() {
 					</Button>
 				</CardFooter>
 			</Card>
-		</form>
 	);
 }
