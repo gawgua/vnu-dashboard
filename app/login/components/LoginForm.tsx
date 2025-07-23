@@ -36,7 +36,8 @@ export default function LoginForm() {
 	};
 
 	return (
-		<Card className="min-w-1/2 max-w-max mx-auto mt-20">
+		<form action={handleSubmit} className="w-full">
+			<Card className="min-w-1/2 max-w-max mx-auto mt-20">
 				<CardHeader>
 					<CardTitle className="text-center text-xl">Đăng nhập</CardTitle>
 					<CardDescription>
@@ -51,32 +52,30 @@ export default function LoginForm() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent>
-					<form action={handleSubmit}>
-						<div className="flex flex-col gap-6">
-							<div className="grid gap-2">
-								<Label htmlFor="username">Mã sinh viên</Label>
-								<Input
-									name="username"
-									id="username"
-									type="text"
-									placeholder="240*****"
-									required
-									disabled={isPending}
-								/>
-							</div>
-							<div className="grid gap-2">
-								<div className="flex items-center">
-									<Label htmlFor="password">Password</Label>
-								</div>
-								<PasswordInput disabled={isPending} />
-								{error && !isPending && (
-									<p className="text-red-500 text-sm">
-										{error}
-									</p>
-								)}
-							</div>
+					<div className="flex flex-col gap-6">
+						<div className="grid gap-2">
+							<Label htmlFor="username">Mã sinh viên</Label>
+							<Input
+								name="username"
+								id="username"
+								type="text"
+								placeholder="240*****"
+								required
+								disabled={isPending}
+							/>
 						</div>
-					</form>
+						<div className="grid gap-2">
+							<div className="flex items-center">
+								<Label htmlFor="password">Password</Label>
+							</div>
+							<PasswordInput disabled={isPending} />
+							{error && !isPending && (
+								<p className="text-red-500 text-sm">
+									{error}
+								</p>
+							)}
+						</div>
+					</div>
 				</CardContent>
 				<CardFooter className="flex-col gap-2">
 					<Button type="submit" className="w-full" disabled={isPending}>
@@ -84,5 +83,6 @@ export default function LoginForm() {
 					</Button>
 				</CardFooter>
 			</Card>
+		</form>
 	);
 }
