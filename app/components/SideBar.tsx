@@ -3,21 +3,21 @@
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import {
-	HomeRounded,
-	SchoolRounded,
-	CalendarMonthRounded,
-	QuizRounded,
-	AccountCircleRounded,
-} from "@mui/icons-material";
+import { 
+	BookOpenCheck,
+	GraduationCap, 
+	House, 
+	CalendarCheck2, 
+	CircleUser 
+} from "lucide-react";
 import { logoutAction } from "../actions";
 import { usePathname } from "next/navigation";
 
 const routes = [
-	{ href: "/", label: "Trang chủ", icon: HomeRounded },
-	{ href: "/gpa", label: "Điểm", icon: SchoolRounded },
-	{ href: "/schedule", label: "Thời khóa biểu", icon: CalendarMonthRounded },
-	{ href: "/exam", label: "Lịch thi", icon: QuizRounded },
+	{ href: "/", label: "Trang chủ", icon: House },
+	{ href: "/gpa", label: "Điểm", icon: GraduationCap },
+	{ href: "/schedule", label: "Thời khóa biểu", icon: CalendarCheck2 },
+	{ href: "/exam", label: "Lịch thi", icon: BookOpenCheck },
 ];
 
 export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, username: string }) {
@@ -27,7 +27,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 		<div className="fixed m-6 w-80 h-[calc(100vh-3rem)] bg-primary rounded-[3rem] p-8 flex flex-col justify-between z-50">
 			<div>
 				<h2 className="text-2xl font-bold text-black mb-16">
-					<AccountCircleRounded fontSize="large" className="mr-5"/>
+					<CircleUser size={40} strokeWidth={2.25} className="mr-5"/>
 					{username ? `Hello, ${username}!` : "Hello!"}
 				</h2>
 				<div className="space-y-8">
