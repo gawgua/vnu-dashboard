@@ -21,6 +21,8 @@ import { DatePicker } from "@/components/ui/date-picker";
 import { ThoiKhoaBieuTheoHocKy } from "../page";
 import Timetable from "./Timetable";
 import { toCalendar } from "@/lib/to_ical";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { BadgeQuestionMark } from "lucide-react";
 
 export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 	const [selectedId, setSelectedId] = useState<string>("");
@@ -73,31 +75,41 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 						</SelectContent>
 					</Select>
 					{selectedId && (
-						<Popover open={exportOpen} onOpenChange={setExportOpen}>
-							<PopoverTrigger asChild>
-								<Button className="mt-2">
-									{"Xuất thời khóa biểu (*.ics)"}
-								</Button>
-							</PopoverTrigger>
-							<PopoverContent className="w-full p-4 space-y-4" align="start">
-								<div className="grid grid-cols-2 gap-4">
-									<div className="space-y-2 w-full">
-										<Label>Ngày bắt đầu học kì</Label>
-										<DatePicker date={startDate} setDate={setStartDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
+						<div className="flex items-center gap-2 mt-2">
+							<Popover open={exportOpen} onOpenChange={setExportOpen}>
+								<PopoverTrigger asChild>
+									<Button>
+										Xuất thời khóa biểu
+									</Button>
+								</PopoverTrigger>
+								<PopoverContent className="w-full p-4 space-y-4" align="start">
+									<div className="grid grid-cols-2 gap-4">
+										<div className="space-y-2 w-full">
+											<Label>Ngày bắt đầu học kì</Label>
+											<DatePicker date={startDate} setDate={setStartDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
+										</div>
+										<div className="space-y-2 w-full">
+											<Label>Ngày kết thúc học kì</Label>
+											<DatePicker date={endDate} setDate={setEndDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
+										</div>
 									</div>
-									<div className="space-y-2 w-full">
-										<Label>Ngày kết thúc học kì</Label>
-										<DatePicker date={endDate} setDate={setEndDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
-									</div>
-								</div>
-								{exportError && (
-									<div className="text-red-500 text-sm">
-										{exportError}
-									</div>
-								)}
-								<Button onClick={handleExport} className="w-full">Xuất</Button>
-							</PopoverContent>
-						</Popover>
+									{exportError && (
+										<div className="text-red-500 text-sm">
+											{exportError}
+										</div>
+									)}
+									<Button onClick={handleExport} className="w-full">Xuất</Button>
+								</PopoverContent>
+							</Popover>
+							<Tooltip>
+								<TooltipTrigger>
+									<BadgeQuestionMark className="hover:text-primary"/>
+								</TooltipTrigger>
+								<TooltipContent align="start" side="right">
+									Xuất file .ics có thể import vào các ứng dụng lịch như Google Calendar, Apple Calendar, Outlook, etc...
+								</TooltipContent>
+							</Tooltip>
+						</div>
 					)}
 				</CardContent>
 			</Card>
