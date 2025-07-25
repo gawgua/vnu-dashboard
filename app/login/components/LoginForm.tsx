@@ -37,7 +37,7 @@ export default function LoginForm() {
 
 	return (
 		<form action={handleSubmit} className="w-full">
-			<Card className="min-w-1/2 max-w-max mx-auto mt-20">
+			<Card className="min-w-xl max-w-max mx-auto">
 				<CardHeader>
 					<CardTitle className="text-center text-xl">Đăng nhập</CardTitle>
 					<CardDescription>

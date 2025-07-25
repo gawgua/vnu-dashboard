@@ -32,7 +32,7 @@ export default async function ExamPage() {
 	});
 
 	return (
-		<div className="w-full space-y-4">
+		<div className="w-full mt-2.25 mb-2.25 mr-2">
 			<Card>
 				<CardTitle className="text-2xl font-bold p-6 pb-2 pt-0.5">
 					Lịch Thi {`Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`}

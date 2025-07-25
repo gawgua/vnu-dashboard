@@ -59,7 +59,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 	}
 
 	return (
-		<div className="w-full space-y-4">
+		<div className="w-full mr-2 space-y-4">
 			<Card className="py-3">
 				<CardContent>
 					<Select onValueChange={setSelectedId}>
@@ -114,7 +114,7 @@ export default function Schedule({ data }: { data: ThoiKhoaBieuTheoHocKy[] }) {
 				</CardContent>
 			</Card>
 			{selectedId && (
-				<ScrollArea className="h-[calc(100vh-11rem)] w-full rounded-3xl [&>[data-slot=scroll-area-scrollbar]]:hidden">
+				<ScrollArea className="h-[calc(100vh-9rem)] w-full rounded-3xl [&>[data-slot=scroll-area-scrollbar]]:hidden">
 					<Timetable data={currentHocKy.thoiKhoaBieu}/>
 				</ScrollArea>
 			)}

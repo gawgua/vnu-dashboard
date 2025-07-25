@@ -1,17 +1,36 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 import { 
 	BookOpenCheck,
 	GraduationCap, 
 	House, 
 	CalendarCheck2, 
-	CircleUser 
+	CircleUser,
+	LogOut
 } from "lucide-react";
+import { 
+	Sidebar, 
+	SidebarContent, 
+	SidebarFooter, 
+	SidebarHeader,
+	SidebarMenu,
+	SidebarMenuItem,
+	SidebarMenuButton,
+	SidebarTrigger,
+	useSidebar
+} from "@/components/ui/sidebar";
+import { 
+	Tooltip, 
+	TooltipContent, 
+	TooltipTrigger 
+} from "@/components/ui/tooltip";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import vnuLogo from "@/public/vnu_logo.png";
 import { logoutAction } from "../actions";
-import { usePathname } from "next/navigation";
 
 const routes = [
 	{ href: "/", label: "Trang chủ", icon: House },
@@ -22,47 +41,79 @@ const routes = [
 
 export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, username: string }) {
 	const pathname = usePathname();
+	const { isMobile, open } = useSidebar();
 
 	return (
-		<div className="fixed m-6 w-80 h-[calc(100vh-3rem)] bg-primary rounded-[3rem] p-8 flex flex-col justify-between z-50">
-			<div>
-				<h2 className="text-2xl font-bold text-black mb-16">
-					<CircleUser size={40} strokeWidth={2.25} className="mr-5"/>
-					{username ? `Hello, ${username}!` : "Hello!"}
-				</h2>
-				<div className="space-y-8">
-					{routes.map((route) => (
-						<div key={route.href.replace("/", "")} className="text-xl font-semibold text-black cursor-pointer">
-							<Link
-								prefetch={true}
-								key={route.href}
-								href={route.href}
-								className={cn(
-									"block px-3 py-2 rounded-md text-sm font-medium transition-colors",
-									pathname === route.href
-									? "bg-accent text-white"
-									: "hover:bg-muted"
-								)}
+		<>
+			{isMobile && <SidebarTrigger className="hover:bg-primary">a</SidebarTrigger>}
+			<Sidebar variant="floating" collapsible="icon">
+				<SidebarHeader className="flex items-center justify-center">
+					{open && (
+						<Image
+							src={vnuLogo}
+							alt="VNU Logo"
+							width={480}
+							height={480}
+							className="mb-1.5 w-30 h-30 select-none"
+							draggable={false}
+						/>
+					)}
+					<SidebarMenu>
+						<SidebarMenuItem>
+							<SidebarMenuButton asChild className="hover:bg-transparent active:bg-transparent">
+								<div className="flex items-center gap-2">
+									<CircleUser size={32} />
+									<span className="text-lg font-semibold">
+										{isSignIn ? username : "Hello!"}
+									</span>
+								</div>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					</SidebarMenu>
+				</SidebarHeader>
+				<Separator />
+				<SidebarContent>
+					<SidebarMenu>
+						{routes.map((route) => (
+							<SidebarMenuItem key={route.href}>
+								<SidebarMenuButton
+									asChild
+									isActive={pathname === route.href}
+									className="hover:bg-primary"
 								>
-								<route.icon key={route.href + "-icon"} className="mr-5" />
-								{route.label}
-							</Link>
+									<Link href={route.href}>
+										<route.icon size={20} />
+										<span>{route.label}</span>
+									</Link>
+								</SidebarMenuButton>
+							</SidebarMenuItem>
+						))}
+					</SidebarMenu>
+				</SidebarContent>
+				<SidebarFooter>
+					{!isMobile && (
+						<div className="flex justify-end">
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<SidebarTrigger className="hover:bg-primary" />
+								</TooltipTrigger>
+								<TooltipContent side="right">
+									{open ? "Đóng thanh công cụ" : "Mở thanh công cụ"}
+								</TooltipContent>
+							</Tooltip>
 						</div>
-					))}
-				</div>
-			</div>
-			{
-				isSignIn &&
-				<form action={logoutAction}>
-					<Button
-						type="submit"
-						variant="secondary"
-						className="bg-white text-black hover:bg-gray-100 rounded-2xl py-6 text-lg font-semibold"
-					>
-						Đăng xuất
-					</Button>
-				</form>
-			}	
-		</div>
+					)}
+					{isSignIn && (
+						<Button
+							variant="outline"
+							className="hover:bg-primary hover:text-white"
+							onClick={() => logoutAction()}
+						>
+							{open ? "Đăng xuất" : <LogOut />}
+						</Button>
+					)}
+				</SidebarFooter>
+			</Sidebar>
+		</>
 	);
 }

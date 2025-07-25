@@ -41,23 +41,21 @@ export default async function GPAPage() {
 	}
 	
 	return (
-		<div className="w-full space-y-4">
+		<div className="w-full mr-2 mt-2.25 mb-2.25">
 			<Card>
 				<CardContent>
 					<Table>
-						<TableHeader>
-							<TableRow>
-								<TableHead>Mã học phần</TableHead>
-								<TableHead>Tên môn học</TableHead>
-								<TableHead>Số tín chỉ</TableHead>
-								<TableHead>Điểm hệ 10</TableHead>
-								<TableHead>Điểm hệ 4</TableHead>
-								<TableHead>Điểm hệ chữ</TableHead>
-							</TableRow>
+						<TableHeader className="bg-gray-500/40">
+							<TableHead>Mã học phần</TableHead>
+							<TableHead>Tên môn học</TableHead>
+							<TableHead>Số tín chỉ</TableHead>
+							<TableHead>Điểm hệ 10</TableHead>
+							<TableHead>Điểm hệ 4</TableHead>
+							<TableHead>Điểm hệ chữ</TableHead>
 						</TableHeader>
 						{gpaTongKet.map((hocKy) => (
 						<Fragment key={hocKy.id}>
-							<TableHeader>
+							<TableHeader className="bg-gray-500/20">
 								<TableHead colSpan={6}>{hocKy.tenHocKy}</TableHead>
 							</TableHeader>
 							<TableBody>
@@ -90,14 +88,14 @@ export default async function GPAPage() {
 									</DialogContent>
 								</Dialog>
 								))}
-								<TableRow>
+								<TableRow className="border-b-0">
 									<TableCell colSpan={3}>Điểm trung bình học kỳ</TableCell>
 									<TableCell>{hocKy.tongket.diemTrungBinhHe10_HocKy}</TableCell>
-									<TableCell>{hocKy.tongket.diemTrungBinhHe4_HocKy}</TableCell>
+									<TableCell colSpan={2}>{hocKy.tongket.diemTrungBinhHe4_HocKy}</TableCell>
 								</TableRow>
 								<TableRow>
 									<TableCell colSpan={2}>Tổng số tín chỉ tích lũy: {hocKy.tongket.tongSoTinChiTichLuy_HocKy}</TableCell>
-									<TableCell colSpan={2}>Tổng số tín chỉ trượt: {hocKy.tongket.tongSoTinChiTruot_HocKy}</TableCell>
+									<TableCell colSpan={4}>Tổng số tín chỉ trượt: {hocKy.tongket.tongSoTinChiTruot_HocKy}</TableCell>
 								</TableRow>
 							</TableBody>
 						</Fragment>

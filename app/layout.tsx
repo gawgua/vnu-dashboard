@@ -7,6 +7,7 @@ import SideBar from "./components/SideBar";
 import { APIHandler } from "@/lib/APIHandler";
 import { Suspense } from "react";
 import Loading from "./loading";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
 	title: "VNU Dashboard",
@@ -25,17 +26,19 @@ export default async function Layout({ children }: { children: React.ReactNode }
 		const info = await apiHandler.getInfoSinhVien();
 		username = info.hoVaTen;
 	}
-
+	
 	return (
 		<html lang="vi">
 			<body>
-				<div className="flex min-h-screen bg-background">
-					<SideBar isSignIn={isSignedIn} username={username ? username : ""} />
-					<main className="flex-1 ml-[22rem] overflow-y-auto p-6 flex justify-center items-center">
-						<Suspense fallback={<Loading />}>
-							{children}
-						</Suspense>
-					</main>
+				<div className="min-h-screen bg-background">
+					<SidebarProvider>
+						<SideBar isSignIn={isSignedIn} username={username ? username : ""} />
+						<main className="flex justify-center items-center w-full min-h-screen overflow-y-auto">
+							<Suspense fallback={<Loading />}>
+								{children}
+							</Suspense>
+						</main>
+					</SidebarProvider>
 				</div>
 				<Analytics />
 			</body>
