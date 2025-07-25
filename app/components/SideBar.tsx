@@ -119,7 +119,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 				<Separator />
 				<SidebarFooter>
 					{!isMobile && (
-						<div className="flex justify-end">
+						<div className={cn("flex", open ? "justify-end" : "justify-center")}>
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<SidebarTrigger className="hover:bg-primary" />
