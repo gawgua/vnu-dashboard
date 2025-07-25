@@ -90,6 +90,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 						))}
 					</SidebarMenu>
 				</SidebarContent>
+				<Separator />
 				<SidebarFooter>
 					{!isMobile && (
 						<div className="flex justify-end">
