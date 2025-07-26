@@ -1,12 +1,29 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { 
+	Card, 
+	CardContent 
+} from "@/components/ui/card";
+import { 
+	Dialog, 
+	DialogContent, 
+	DialogTitle, 
+	DialogTrigger
+} from "@/components/ui/dialog";
+import { 
+	Table, 
+	TableBody, 
+	TableCell, 
+	TableHead, 
+	TableHeader, 
+	TableRow 
+} from "@/components/ui/table";
 import { Fragment } from "react";
 import { APIHandler } from "@/lib/APIHandler";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { DiemHocPhanResponse } from "@/types/ResponseTypes";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import { Label } from "@/components/ui/label";
+import DesireGPACal from "./components/DesireGPACal";
 
 export default async function GPAPage() {
 	const token = (await cookies()).get("accessToken")?.value;
@@ -16,6 +33,7 @@ export default async function GPAPage() {
 	}
 	
 	const apiHandler = new APIHandler(token, refreshToken);
+	const { diemTrungBinhHe4TichLuy, tongSoTinChiTichLuy } = (await apiHandler.getTongKetDenHienTai())[0];
 	const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoDiem();
 	const gpaTongKet = [];
 	const subjectDetails: Record<string, DiemHocPhanResponse[]> = {};
@@ -41,7 +59,8 @@ export default async function GPAPage() {
 	}
 	
 	return (
-		<div className="w-full mr-2 mt-2.25 mb-2.25">
+		<div className="w-full space-y-4 mr-2 mt-2.25 mb-2.25">
+			<DesireGPACal credit={Number.parseInt(tongSoTinChiTichLuy)} gpa={Number.parseFloat(diemTrungBinhHe4TichLuy)}/>
 			<Card>
 				<CardContent>
 					<Table>
@@ -82,7 +101,7 @@ export default async function GPAPage() {
 										<DialogTitle>Điểm chi tiết</DialogTitle>
 										{subjectDetails[monHoc.maHocPhan].map((detail) => (
 											<div key={`${monHoc.maHocPhan}-detail`}>
-												<p><strong>{detail.loaiDiemHocPhan}:</strong> {detail.diemHe10}</p>
+												<Label><strong>{detail.loaiDiemHocPhan}:</strong> {detail.diemHe10}</Label>
 											</div>
 										))}
 									</DialogContent>
