@@ -3,12 +3,6 @@ import {
 	CardContent 
 } from "@/components/ui/card";
 import { 
-	Dialog, 
-	DialogContent, 
-	DialogTitle, 
-	DialogTrigger
-} from "@/components/ui/dialog";
-import { 
 	Table, 
 	TableBody, 
 	TableCell, 
@@ -20,10 +14,8 @@ import { Fragment } from "react";
 import { APIHandler } from "@/lib/APIHandler";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { DiemHocPhanResponse } from "@/types/ResponseTypes";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { Label } from "@/components/ui/label";
 import DesireGPACal from "./components/DesireGPACal";
+import SubjectRow from "./components/SubjectRow";
 
 export default async function GPAPage() {
 	const token = (await cookies()).get("accessToken")?.value;
@@ -36,7 +28,6 @@ export default async function GPAPage() {
 	const { diemTrungBinhHe4TichLuy, tongSoTinChiTichLuy } = (await apiHandler.getTongKetDenHienTai())[0];
 	const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoDiem();
 	const gpaTongKet = [];
-	const subjectDetails: Record<string, DiemHocPhanResponse[]> = {};
 
 	for (const hocKy of danhSachHocKy) {
 		const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
@@ -49,14 +40,6 @@ export default async function GPAPage() {
 		});
 	}
 	gpaTongKet.sort((a, b) => Number(a.id) - Number(b.id));
-
-	for (const hocKy of gpaTongKet) {
-		for (const monHoc of hocKy.diemHocKy) {
-			const scores = await apiHandler.getDiemHocPhanHocKy(monHoc.idHocPhan, hocKy.id);
-			scores.sort((a, b) => Number.parseFloat(a.trongSo) - Number.parseFloat(b.trongSo));
-			subjectDetails[monHoc.maHocPhan] = scores;
-		}
-	}
 	
 	return (
 		<div className="w-full space-y-4 mr-2 mt-2.25 mb-2.25">
@@ -79,33 +62,11 @@ export default async function GPAPage() {
 							</TableHeader>
 							<TableBody>
 								{hocKy.diemHocKy.map((monHoc) => (
-								<Dialog key={monHoc.maHocPhan}>
-									<Tooltip delayDuration={700}>
-										<TooltipTrigger asChild>
-											<DialogTrigger asChild>
-												<TableRow className="cursor-pointer">
-													<TableCell>{monHoc.maHocPhan}</TableCell>
-													<TableCell>{monHoc.tenHocPhan}</TableCell>
-													<TableCell>{monHoc.soTinChi}</TableCell>
-													<TableCell>{monHoc.diemHe10}</TableCell>
-													<TableCell>{monHoc.diemHe4}</TableCell>
-													<TableCell>{monHoc.diemHeChu}</TableCell>
-												</TableRow>
-											</DialogTrigger>
-										</TooltipTrigger>
-										<TooltipContent>
-											Ấn để xem chi tiết
-										</TooltipContent>
-									</Tooltip>
-									<DialogContent>
-										<DialogTitle>Điểm chi tiết</DialogTitle>
-										{subjectDetails[monHoc.maHocPhan].map((detail) => (
-											<div key={`${monHoc.maHocPhan}-detail`}>
-												<Label><strong>{detail.loaiDiemHocPhan}:</strong> {detail.diemHe10}</Label>
-											</div>
-										))}
-									</DialogContent>
-								</Dialog>
+									<SubjectRow 
+										key={monHoc.maHocPhan}
+										monHoc={monHoc}
+										hocKyId={hocKy.id}
+									/>
 								))}
 								<TableRow className="border-b-0">
 									<TableCell colSpan={3}>Điểm trung bình học kỳ</TableCell>
