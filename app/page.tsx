@@ -49,7 +49,10 @@ export default async function HomePage() {
 					<div><span className="font-bold">Họ tên:</span> {svInfo.hoVaTen}</div>
 					<div><span className="font-bold">Đơn vị:</span> {donVi.find((dv) => dv.guid === svInfo.guidDonVi)!.tenDonVi}</div>
 					<div><span className="font-bold">Ngành học:</span> {nganhDaoTao.find((ndt) => ndt.id === svInfo.idNganhDaoTao && ndt.guidDonVi === svInfo.guidDonVi)!.ten}</div>
-					<div><span className="font-bold">Lớp khóa học:</span> {classData.ten} ({classData.tenVietTat})</div>
+					<div>
+						<span className="font-bold">Lớp khóa học: </span> 
+						{classData.ten} {classData.ten != classData.tenVietTat && <>({classData.tenVietTat})</>}
+					</div>
 				</CardContent>
 			</Card>
 			<Card className="bg-primary text-white font-semibold p-1.5 border-0">
