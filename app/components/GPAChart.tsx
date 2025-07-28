@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 import { 
 	LineChart, 
 	Line, 
@@ -43,7 +43,7 @@ export default function GPAChart({data}: {
 							tickLine={false} 
 							axisLine={false} 
 							/>
-						<Legend />
+						<ChartLegend content={<ChartLegendContent />} />
 						<Line type="linear" dataKey="tongket" stroke={chartConfig.tongket.color} strokeWidth={2}>
 							<LabelList position="bottom" />
 						</Line>
