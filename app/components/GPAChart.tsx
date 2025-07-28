@@ -2,7 +2,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { BedIcon } from "lucide-react";
 import { 
 	LineChart, 
 	Line, 

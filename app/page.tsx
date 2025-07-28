@@ -1,7 +1,7 @@
 import { APIHandler } from "@/lib/APIHandler";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { donVi, heDaoTao, nganhDaoTao } from "@/lib/constants";
+import { donVi, nganhDaoTao } from "@/lib/constants";
 import GPAChart from "./components/GPAChart";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
