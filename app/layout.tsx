@@ -11,8 +11,17 @@ import Loading from "./loading";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
-	title: "VNU Dashboard",
-	description: "A dashboard for VNU students",
+	title: {
+		default: "VNU Dashboard",
+		template: "%s | VNU Dashboard"
+	},
+	description: "A general dashboard for VNU students",
+	authors: {
+		name: "nguen",
+		url: "https://github.com/gawgua"
+	},
+	keywords: ["VNU", "Dashboard", "Student", "University", "Vietnam"],
+
 };
 
 export default async function Layout({ children }: { children: React.ReactNode }) {

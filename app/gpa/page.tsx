@@ -16,6 +16,11 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import DesireGPACal from "./components/DesireGPACal";
 import SubjectRow from "./components/SubjectRow";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Điểm"
+}
 
 export default async function GPAPage() {
 	const token = (await cookies()).get("accessToken")?.value;

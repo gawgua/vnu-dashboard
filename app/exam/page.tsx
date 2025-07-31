@@ -8,6 +8,11 @@ import {
 } from "@/components/ui/card";
 import ExamList from "./components/ExamList";
 import { Label } from "@/components/ui/label";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "Lịch thi"
+}
 
 export default async function ExamPage() {
 	const token = (await cookies()).get("accessToken")?.value;

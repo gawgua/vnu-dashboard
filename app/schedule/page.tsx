@@ -3,12 +3,17 @@ import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import Schedule from "./components/Schedule";
+import { Metadata } from "next";
 
 export interface ThoiKhoaBieuTheoHocKy {
 	id: string;
 	tenHocKy: string;
 	thoiKhoaBieu: ThoiKhoaBieuResponse[];
 }
+
+export const metadata: Metadata = {
+	title: "Thời khóa biểu"
+};
 
 export default async function SchedulePage() {
 	const token = (await cookies()).get("accessToken")?.value;
