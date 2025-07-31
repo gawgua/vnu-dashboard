@@ -9,7 +9,6 @@ import {
 	CartesianGrid, 
 	LabelList,
 	YAxis,
-	Legend
 } from "recharts";
 
 export default function GPAChart({data}: {
