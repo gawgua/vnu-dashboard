@@ -52,18 +52,22 @@ export default async function GPAPage() {
 			<Card>
 				<CardContent>
 					<Table>
-						<TableHeader className="bg-gray-500/40">
-							<TableHead>Mã học phần</TableHead>
-							<TableHead>Tên môn học</TableHead>
-							<TableHead>Số tín chỉ</TableHead>
-							<TableHead>Điểm hệ 10</TableHead>
-							<TableHead>Điểm hệ 4</TableHead>
-							<TableHead>Điểm hệ chữ</TableHead>
+						<TableHeader>
+							<TableRow className="bg-gray-500/40 hover:bg-gray-500/40">
+								<TableHead>Mã học phần</TableHead>
+								<TableHead>Tên môn học</TableHead>
+								<TableHead>Số tín chỉ</TableHead>
+								<TableHead>Điểm hệ 10</TableHead>
+								<TableHead>Điểm hệ 4</TableHead>
+								<TableHead>Điểm hệ chữ</TableHead>
+							</TableRow>
 						</TableHeader>
 						{gpaTongKet.map((hocKy) => (
 						<Fragment key={hocKy.id}>
-							<TableHeader className="bg-gray-500/20">
-								<TableHead colSpan={6}>{hocKy.tenHocKy}</TableHead>
+							<TableHeader>
+								<TableRow className="bg-gray-500/20 hover:bg-gray-500/20">
+									<TableHead colSpan={6}>{hocKy.tenHocKy}</TableHead>
+								</TableRow>
 							</TableHeader>
 							<TableBody>
 								{hocKy.diemHocKy.map((monHoc) => (
