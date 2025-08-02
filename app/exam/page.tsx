@@ -9,6 +9,7 @@ import {
 import ExamList from "./components/ExamList";
 import { Label } from "@/components/ui/label";
 import { Metadata } from "next";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
 	title: "Lịch thi"
@@ -38,18 +39,23 @@ export default async function ExamPage() {
 
 	return (
 		<div className="w-full mt-2.25 mb-2.25 mr-2">
-			<Card>
-				<CardTitle className="text-2xl font-bold p-6 pb-2 pt-0.5">
+			<Card className="gap-3">
+				<CardTitle className="text-xl font-bold px-6">
 					Lịch Thi {`Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`}
 				</CardTitle>
 				<CardContent>
-					<Label className="mb-0.5">Sắp thi:</Label>
 					{lichThiGroups["upcoming"] && (
-					<ExamList data={lichThiGroups["upcoming"]} className="m-3"/>
+					<>
+						<Label className="mb-0.5">Sắp thi:</Label>
+						<ExamList data={lichThiGroups["upcoming"]} className="m-3"/>
+					</>
 					)}
-					<Label className="mt-5 mb-0.5">Đã thi:</Label>
+					{lichThiGroups["upcoming"] && lichThiGroups["past"] && <Separator />}
 					{lichThiGroups["past"] && (
-					<ExamList data={lichThiGroups["past"]} className="m-3"/>
+					<>
+						<Label className="mt-5 mb-0.5">Đã thi:</Label>
+						<ExamList data={lichThiGroups["past"]} className="m-3"/>
+					</>
 					)}
 				</CardContent>
 			</Card>
