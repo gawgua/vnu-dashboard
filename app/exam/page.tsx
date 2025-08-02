@@ -1,6 +1,4 @@
-import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
-import { APIHandler } from "@/lib/APIHandler";
+import { withAuth } from "@/lib/APIHandler";
 import { 
 	Card, 
 	CardTitle,
@@ -16,25 +14,25 @@ export const metadata: Metadata = {
 }
 
 export default async function ExamPage() {
-	const token = (await cookies()).get("accessToken")?.value;
-	const refreshToken = (await cookies()).get("refreshToken")?.value;
-	if (!token) {
-		redirect("/login");
-	}
-	
-	const apiHandler = new APIHandler(token, refreshToken);
-	const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoLichThi();
-	const hocKy = danhSachHocKy.reduce((prev, curr) => {
-		return curr.id > prev.id ? curr : prev;
-	}, danhSachHocKy[0]);
-	const lichThi = await apiHandler.getLichThiHocKy(hocKy.id);
-	const lichThiGroups = Object.groupBy(lichThi, (item) => {
-		if (item.ngayThi === null) return "upcoming";
+	const { lichThiGroups, hocKy } = await withAuth(async (apiHandler) => {
+		const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoLichThi();
+		const hocKy = danhSachHocKy.reduce((prev, curr) => {
+			return curr.id > prev.id ? curr : prev;
+		}, danhSachHocKy[0]);
+		const lichThi = await apiHandler.getLichThiHocKy(hocKy.id);
+		const lichThiGroups = Object.groupBy(lichThi, (item) => {
+			if (item.ngayThi === null) return "upcoming";
 
-		const now = new Date();
-		const examDate = new Date(item.ngayThi.split("/").reverse().join("-"));
-		if (examDate < now) return "past";
-		else return "upcoming";
+			const now = new Date();
+			const examDate = new Date(item.ngayThi.split("/").reverse().join("-"));
+			if (examDate < now) return "past";
+			else return "upcoming";
+		});
+
+		return {
+			lichThiGroups,
+			hocKy
+		};
 	});
 
 	return (

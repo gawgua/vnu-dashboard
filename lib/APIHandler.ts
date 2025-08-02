@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import https from "https";
 import { unstable_cache } from 'next/cache';
 import {
@@ -13,6 +13,8 @@ import {
     ThoiKhoaBieuResponse,
     TongKetResponse,
 } from "@/types/ResponseTypes";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const BASE_URL = "https://onevnu-mobile-api.vnu.edu.vn/api";
 
@@ -471,5 +473,29 @@ export class APIHandler {
 		}
 
 		return await getCachedDiemTrungBinh(this.accessToken, idHocKy);
+	}
+}
+
+export async function withAuth<T>(callback: (apiHandler: APIHandler) => Promise<T>) {
+	const cookieStore = await cookies();
+	const accessToken = cookieStore.get("accessToken")?.value;
+	const refreshToken = cookieStore.get("refreshToken")?.value;
+	const remember = cookieStore.get("remember")?.value === "true";
+
+	if (!accessToken) {
+		redirect("/login");
+	}
+	
+	const apiHandler = new APIHandler(accessToken, refreshToken);
+	try {
+		return callback(apiHandler);
+	} catch (error) {
+		if (error instanceof AxiosError &&  error.status === 401 && remember) {
+			const {accessToken, refreshToken} = await apiHandler.refreshtoken();
+			cookieStore.set("accessToken", accessToken);
+			cookieStore.set("refreshToken", refreshToken);
+			return callback(apiHandler);
+		}
+		throw error;
 	}
 }

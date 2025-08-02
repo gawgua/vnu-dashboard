@@ -11,9 +11,7 @@ import {
 	TableRow 
 } from "@/components/ui/table";
 import { Fragment } from "react";
-import { APIHandler } from "@/lib/APIHandler";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { withAuth } from "@/lib/APIHandler";
 import DesireGPACal from "./components/DesireGPACal";
 import SubjectRow from "./components/SubjectRow";
 import { Metadata } from "next";
@@ -23,28 +21,28 @@ export const metadata: Metadata = {
 }
 
 export default async function GPAPage() {
-	const token = (await cookies()).get("accessToken")?.value;
-	const refreshToken = (await cookies()).get("refreshToken")?.value;
-	if (!token) {
-		redirect("/login");
-	}
+	const { diemTrungBinhHe4TichLuy, tongSoTinChiTichLuy, gpaTongKet } = await withAuth(async (apiHandler) => {
+		const { diemTrungBinhHe4TichLuy, tongSoTinChiTichLuy } = (await apiHandler.getTongKetDenHienTai())[0];
+		const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoDiem();
+		const gpaTongKet = [];
 	
-	const apiHandler = new APIHandler(token, refreshToken);
-	const { diemTrungBinhHe4TichLuy, tongSoTinChiTichLuy } = (await apiHandler.getTongKetDenHienTai())[0];
-	const danhSachHocKy = await apiHandler.getDanhSachHocKyTheoDiem();
-	const gpaTongKet = [];
-
-	for (const hocKy of danhSachHocKy) {
-		const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
-		const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
-		gpaTongKet.push({
-			id: hocKy.id,
-			tenHocKy: `Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`,
-			tongket,
-			diemHocKy
-		});
-	}
-	gpaTongKet.sort((a, b) => Number(a.id) - Number(b.id));
+		for (const hocKy of danhSachHocKy) {
+			const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
+			const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
+			gpaTongKet.push({
+				id: hocKy.id,
+				tenHocKy: `Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`,
+				tongket,
+				diemHocKy
+			});
+		}
+		gpaTongKet.sort((a, b) => Number(a.id) - Number(b.id));
+		return { 
+			diemTrungBinhHe4TichLuy, 
+			tongSoTinChiTichLuy, 
+			gpaTongKet 
+		};
+	});
 	
 	return (
 		<div className="w-full space-y-4 mr-2 mt-2.25 mb-2.25">
