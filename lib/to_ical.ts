@@ -1,16 +1,17 @@
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { getPeriodTime } from "@/app/schedule/components/SubjectCard";
 import { createEvents, EventAttributes } from "ics";
+import { PeriodTime } from "./constants";
 
 const days = ["MO", "TU", "WE", "TH", "FR", "SA", "SU"];
 const SEC_PER_DAY = 24 * 60 * 60;
 const GMT7_OFFSET = 7 * 60 * 60;
 
-export function toCalendar(data: ThoiKhoaBieuResponse[], startDate: Date, endDate: Date): string {
+export function toCalendar(data: ThoiKhoaBieuResponse[], startDate: Date, endDate: Date, periodTime: PeriodTime[]): string {
 	const events: EventAttributes[] = [];
 
 	for (const event of data) {
-		const { startTime, endTime } = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc));
+		const { startTime, endTime } = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc), periodTime);
 		let startDay = startDate.getDay();
 		if (startDay === 0) {
 			startDay = 7;

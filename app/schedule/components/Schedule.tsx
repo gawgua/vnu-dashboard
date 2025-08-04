@@ -13,6 +13,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { 
+	Dialog, 
+	DialogClose, 
+	DialogContent, 
+	DialogFooter, 
+	DialogHeader, 
+	DialogTitle, 
+	DialogTrigger 
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -23,16 +32,29 @@ import { toCalendar } from "@/lib/to_ical";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { BadgeQuestionMark } from "lucide-react";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
-import { getScheduleFromSemester } from "../actions";
+import { getScheduleFromSemester, saveCustomPeriodTime } from "../actions";
+import { defaultPeriodTime, PeriodTime } from "@/lib/constants";
+import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { CheckedState } from "@radix-ui/react-checkbox";
 
-export default function Schedule({ data }: { data: { id: string, tenHocKy: string }[] }) {
+export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: { data: { id: string, tenHocKy: string }[], customPeriodTime?: PeriodTime[] }) {
+	const [loading, setLoading] = useState<boolean>(false);
 	const [selectedId, setSelectedId] = useState<string>("");
+	const [currentHocKy, setCurrentHocKy] = useState<ThoiKhoaBieuResponse[] | null>(null);
+	const [periodTime, setPeriodTime] = useState<PeriodTime[]>(customPeriodTime);
 	const [exportOpen, setExportOpen] = useState<boolean>(false);
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 	const [exportError, setExportError] = useState<string | null>(null);
-	const [currentHocKy, setCurrentHocKy] = useState<ThoiKhoaBieuResponse[] | null>(null);
-	const [loading, setLoading] = useState<boolean>(false);
+	const [save, setSave] = useState<CheckedState>(false);
+
+	function handleCustomPeriodTime() {
+		if (save) {
+			saveCustomPeriodTime(periodTime);
+		}
+	}
 
 	function handleExport() {
 		setExportError(null);
@@ -41,7 +63,7 @@ export default function Schedule({ data }: { data: { id: string, tenHocKy: strin
 			return;
 		}
 		try {
-			const icsContent = toCalendar(currentHocKy!, startDate, endDate);
+			const icsContent = toCalendar(currentHocKy!, startDate, endDate, periodTime);
 			
 			// Create blob and download
 			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
@@ -87,6 +109,60 @@ export default function Schedule({ data }: { data: { id: string, tenHocKy: strin
 					</Select>
 					{currentHocKy && (
 						<div className="flex items-center gap-2 mt-2">
+							<Dialog>
+								<DialogTrigger asChild>
+									<Button>Đổi thời gian tiết học</Button>
+								</DialogTrigger>
+								<DialogContent className="max-w-md">
+									<DialogTitle className="text-2xl">Đổi thời gian tiết học</DialogTitle>
+									<Separator className="bg-gray-300" />
+									<div className="space-y-4">
+										<div className="grid grid-cols-3 gap-2 font-semibold text-sm">
+											<Label></Label> {/* for alignment */}
+											<Label>Bắt đầu</Label>
+											<Label>Kết thúc</Label>
+										</div>
+										{periodTime.map((period, index) => (
+											<div key={index} className="grid grid-cols-3 gap-2 items-center">
+												<Label className="text-sm font-medium">
+													Tiết {index + 1}
+												</Label>
+												<Input
+													type="time"
+													value={period.start}
+													onChange={(e) => {
+														const newPeriodTime = [...periodTime];
+														newPeriodTime[index].start = e.target.value;
+														setPeriodTime(newPeriodTime);
+													}}
+													className="px-2 py-1 border border-gray-300 rounded text-sm"
+												/>
+												<Input
+													type="time"
+													value={period.end}
+													onChange={(e) => {
+														const newPeriodTime = [...periodTime];
+														newPeriodTime[index].end = e.target.value;
+														setPeriodTime(newPeriodTime);
+													}}
+													className="px-2 py-1 border border-gray-300 rounded text-sm"
+												/>
+											</div>
+										))}
+									</div>
+									<div className="flex items-center space-x-2">
+										<Checkbox checked={save} onCheckedChange={setSave}/>
+										<Label>Lưu thời gian biểu đã sửa</Label>
+									</div>
+									<DialogFooter>
+										<DialogClose asChild>
+											<Button onClick={handleCustomPeriodTime}>
+												Xác nhận
+											</Button>
+										</DialogClose>
+									</DialogFooter>
+								</DialogContent>
+							</Dialog>
 							<Popover open={exportOpen} onOpenChange={setExportOpen}>
 								<PopoverTrigger asChild>
 									<Button>
@@ -126,7 +202,7 @@ export default function Schedule({ data }: { data: { id: string, tenHocKy: strin
 			</Card>
 			{currentHocKy ? (
 				<ScrollArea className="h-[calc(100vh-9rem)] w-full rounded-3xl [&>[data-slot=scroll-area-scrollbar]]:hidden">
-					<Timetable data={currentHocKy!}/>
+					<Timetable data={currentHocKy!} periodTime={periodTime}/>
 				</ScrollArea>
 			) : loading && (
 				<div className="flex items-center justify-center h-[calc(100vh-6.25rem)]">

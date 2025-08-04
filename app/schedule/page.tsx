@@ -1,6 +1,7 @@
 import { withAuth } from "@/lib/APIHandler";
 import Schedule from "./components/Schedule";
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
 	title: "Thời khóa biểu"
@@ -23,6 +24,11 @@ export default async function SchedulePage() {
 		return danhSachHocKy;
 	}); 
 
-
-	return <Schedule data={danhSachHocKy} />;
+	const periodTimeData = (await cookies()).get("customPeriodTime");
+	if (periodTimeData) {
+		const customPeriodTime = JSON.parse(periodTimeData.value);
+		return <Schedule data={danhSachHocKy} customPeriodTime={customPeriodTime}/>;
+	} else {
+		return <Schedule data={danhSachHocKy} />;
+	}
 }

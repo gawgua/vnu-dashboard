@@ -3,6 +3,7 @@
 import { Label } from "@/components/ui/label";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import SubjectCard from "./SubjectCard";
+import { PeriodTime } from "@/lib/constants";
 
 export interface EventInfo {
 	event: ThoiKhoaBieuResponse;
@@ -11,7 +12,7 @@ export interface EventInfo {
 	isSameTime: boolean;
 }
 
-const days = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+const daysAbbr = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 const timeSlots = [
 	"06:00",
 	"07:00",
@@ -119,7 +120,7 @@ function detectOverlaps(events: ThoiKhoaBieuResponse[]): EventInfo[] {
 	return result;
 }
 
-export default function Timetable({data}: {data: ThoiKhoaBieuResponse[]}) {
+export default function Timetable({data, periodTime}: {data: ThoiKhoaBieuResponse[], periodTime: PeriodTime[]}) {
 	function getEventsForDay(day: number): EventInfo[] {
 		const dayEvents = data.filter(event => Number.parseInt(event.ngayTrongTuan) === day);
 		return detectOverlaps(dayEvents);
@@ -132,9 +133,9 @@ export default function Timetable({data}: {data: ThoiKhoaBieuResponse[]}) {
 				<div className="border-r border-gray-200 relative">
           			<div className="absolute bottom-0 left-0 right-0 h-px bg-gray-200"></div>
         		</div>
-				{days.map((day, dayIndex) => (
+				{daysAbbr.map((day, dayIndex) => (
 					<div key={day} className="border-r border-gray-200 text-center py-3">
-						<Label className={`text-sm font-medium block text-center ${getCurrDayOfWeek() == dayIndex + 1 ? "text-red-500" : "text-gray-900"}`}>{day}</Label>
+						<Label className={`text-sm font-bold block text-center ${getCurrDayOfWeek() == dayIndex + 1 ? "text-red-500" : "text-gray-900"}`}>{day}</Label>
 					</div>
 				))}
 
@@ -147,14 +148,15 @@ export default function Timetable({data}: {data: ThoiKhoaBieuResponse[]}) {
 						</div>
 
 						{/* Day Columns */}
-						{days.map((day, dayIndex) => (
+						{daysAbbr.map((day, dayIndex) => (
 						<div key={`${day}-${time}`} className="border-r border-t border-gray-200 relative min-h-[60px]">
 							{timeIndex === 0 && (
 							<div className="absolute inset-0 overflow-visible">
 								{getEventsForDay(dayIndex + 1).map((overlapInfo) => 
 									<SubjectCard 
 									key={`${overlapInfo.event.maHocPhan}-${overlapInfo.event.ngayTrongTuan}-${overlapInfo.event.tietBatDau}`} 
-									eventInfo={overlapInfo} />
+									eventInfo={overlapInfo}
+									periodTime={periodTime} />
 								)}
 							</div>
 							)}

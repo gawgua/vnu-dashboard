@@ -4,10 +4,11 @@ import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { Card, CardContent } from "@/components/ui/card";
 import { EventInfo } from "./Timetable";
 import SubjectPopup from "./SubjectPopup";
-import { periodTime } from "@/lib/constants";
+import { PeriodTime, defaultPeriodTime } from "@/lib/constants";
+import { useState } from "react";
 
-function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: string } {
-	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc));
+function getEventPosition(event: ThoiKhoaBieuResponse, periodTime: PeriodTime[] = defaultPeriodTime): { top: string; height: string } {
+	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc), periodTime);
 
 	const startHour = Number.parseInt(startTime.split(":")[0]);
 	const startMinute = Number.parseInt(startTime.split(":")[1]);
@@ -25,16 +26,15 @@ function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: s
 	};
 }
 
-export function getPeriodTime(start: number, end: number): { startTime: string; endTime: string } {
+export function getPeriodTime(start: number, end: number, periodTime: PeriodTime[]): { startTime: string; endTime: string } {
 	return {
 		startTime: periodTime[start - 1].start,
 		endTime: periodTime[end - 1].end,
 	}
 }
 
-export default function SubjectCard({ eventInfo }: { eventInfo: EventInfo }) {
-	const position = getEventPosition(eventInfo.event);
-
+export default function SubjectCard({ eventInfo, periodTime }: { eventInfo: EventInfo; periodTime: PeriodTime[] }) {
+	const position = getEventPosition(eventInfo.event, periodTime);
 	const cardClassName = eventInfo.isOverlapped 
 		? (eventInfo.isSameTime
 			? "absolute bg-primary border-1 shadow-lg z-20 py-0"
@@ -42,7 +42,6 @@ export default function SubjectCard({ eventInfo }: { eventInfo: EventInfo }) {
 				? "absolute left-1 right-1 bg-primary border-0 shadow-sm z-10 py-0"
 				: "absolute bg-primary border-1 shadow-lg z-20 py-0"))
 		: "absolute left-1 right-1 bg-primary border-0 shadow-sm z-10 py-0";
-
 	const cardStyle = {
 		top: position.top,
 		height: position.height,
@@ -64,7 +63,7 @@ export default function SubjectCard({ eventInfo }: { eventInfo: EventInfo }) {
 						<div className="mb-1">{eventInfo.event.tenHocPhan + ` (${(eventInfo.event.nhom == "0" ? "CL" : `Nhóm ${eventInfo.event.nhom}`)})`}</div>
 						<div className="opacity-90 truncate">
 							{(() => {
-								const { startTime, endTime } = getPeriodTime(Number.parseInt(eventInfo.event.tietBatDau),	Number.parseInt(eventInfo.event.tietKetThuc));
+								const { startTime, endTime } = getPeriodTime(Number.parseInt(eventInfo.event.tietBatDau), Number.parseInt(eventInfo.event.tietKetThuc), periodTime);
 								return `${startTime} - ${endTime}`;
 							})()}
 						</div>

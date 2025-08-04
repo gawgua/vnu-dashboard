@@ -13,3 +13,8 @@ export async function getScheduleFromSemester(id: string): Promise<ThoiKhoaBieuR
 
 	return thoiKhoaBieu;
 }
+
+export async function saveCustomPeriodTime(periodTime: { start: string, end: string }[]) {
+	const cookieStore = await cookies();
+	cookieStore.set("customPeriodTime", JSON.stringify(periodTime));
+}

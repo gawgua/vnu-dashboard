@@ -2863,7 +2863,11 @@ export const nganhDaoTao: DataNganhDaoTao[] = [
     }
 ]
 
-export const periodTime = [
+export interface PeriodTime {
+	start: string;
+	end: string;
+}
+export const defaultPeriodTime: PeriodTime[] = [
 	{ start: "07:00", end: "07:50" },
 	{ start: "07:55", end: "08:45" },
 	{ start: "08:50", end: "09:40" },
