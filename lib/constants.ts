@@ -2862,3 +2862,19 @@ export const nganhDaoTao: DataNganhDaoTao[] = [
         "guidDonVi": "f88a778b-0a4d-4a3b-a8fa-d94a6b5ce6f8"
     }
 ]
+
+export const periodTime = [
+	{ start: "07:00", end: "07:50" },
+	{ start: "07:55", end: "08:45" },
+	{ start: "08:50", end: "09:40" },
+	{ start: "09:50", end: "10:40" },
+	{ start: "10:45", end: "11:35" },
+	{ start: "11:40", end: "12:30" },
+	{ start: "13:30", end: "14:20" },
+	{ start: "14:25", end: "15:15" },
+	{ start: "15:20", end: "16:10" },
+	{ start: "16:20", end: "17:10" },
+	{ start: "17:15", end: "18:05" },
+	{ start: "18:10", end: "19:00" },
+	{ start: "19:05", end: "19:55" },
+];

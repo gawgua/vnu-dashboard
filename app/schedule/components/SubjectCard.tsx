@@ -4,6 +4,7 @@ import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { Card, CardContent } from "@/components/ui/card";
 import { EventInfo } from "./Timetable";
 import SubjectPopup from "./SubjectPopup";
+import { periodTime } from "@/lib/constants";
 
 function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: string } {
 	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc));
@@ -24,25 +25,10 @@ function getEventPosition(event: ThoiKhoaBieuResponse): { top: string; height: s
 	};
 }
 
-const periodToTime = [
-	{ start: "07:00", end: "07:50" },
-	{ start: "07:55", end: "08:45" },
-	{ start: "08:50", end: "09:40" },
-	{ start: "09:50", end: "10:40" },
-	{ start: "10:45", end: "11:35" },
-	{ start: "11:40", end: "12:30" },
-	{ start: "13:00", end: "13:50" },
-	{ start: "13:55", end: "14:45" },
-	{ start: "14:50", end: "15:40" },
-	{ start: "15:50", end: "16:40" },
-	{ start: "16:45", end: "17:35" },
-	{ start: "17:40", end: "18:30" },
-	{ start: "18:35", end: "19:25" },
-];
 export function getPeriodTime(start: number, end: number): { startTime: string; endTime: string } {
 	return {
-		startTime: periodToTime[start - 1].start,
-		endTime: periodToTime[end - 1].end,
+		startTime: periodTime[start - 1].start,
+		endTime: periodTime[end - 1].end,
 	}
 }
 
