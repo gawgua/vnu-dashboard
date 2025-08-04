@@ -18,7 +18,6 @@ import {
 	DialogClose, 
 	DialogContent, 
 	DialogFooter, 
-	DialogHeader, 
 	DialogTitle, 
 	DialogTrigger 
 } from "@/components/ui/dialog";
@@ -151,7 +150,7 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 										))}
 									</div>
 									<div className="flex items-center space-x-2">
-										<Checkbox checked={save} onCheckedChange={setSave}/>
+										<Checkbox checked={save} onCheckedChange={setSave} className="border border-gray-300"/>
 										<Label>Lưu thời gian biểu đã sửa</Label>
 									</div>
 									<DialogFooter>

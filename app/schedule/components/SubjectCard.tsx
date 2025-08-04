@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { EventInfo } from "./Timetable";
 import SubjectPopup from "./SubjectPopup";
 import { PeriodTime, defaultPeriodTime } from "@/lib/constants";
-import { useState } from "react";
 
 function getEventPosition(event: ThoiKhoaBieuResponse, periodTime: PeriodTime[] = defaultPeriodTime): { top: string; height: string } {
 	const {startTime, endTime} = getPeriodTime(Number.parseInt(event.tietBatDau), Number.parseInt(event.tietKetThuc), periodTime);
