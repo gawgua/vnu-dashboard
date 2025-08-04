@@ -19,6 +19,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { DiemHocPhanResponse, DiemThiHocKyResponse } from "@/types/ResponseTypes";
 import { getSubjectDetails } from "../actions";
+import { Separator } from "@/components/ui/separator";
 
 export default function SubjectRow({
 	monHoc,
@@ -65,7 +66,8 @@ export default function SubjectRow({
 				<TooltipContent>Ấn để xem chi tiết</TooltipContent>
 			</Tooltip>
 			<DialogContent>
-				<DialogTitle>Điểm chi tiết</DialogTitle>
+				<DialogTitle className="text-2xl">Điểm chi tiết</DialogTitle>
+				<Separator className="bg-gray-300" />
 				{loading ? (
 					<div>Đang tải...</div>
 				) : subjectDetails ? (
