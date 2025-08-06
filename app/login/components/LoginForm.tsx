@@ -78,7 +78,7 @@ export default function LoginForm() {
 						</div>
 						<div className="flex items-center space-x-2">
 							<Checkbox id="remember" name="remember" />
-							<Label htmlFor="remember">Không đăng xuất</Label>
+							<Label htmlFor="remember">Duy trì đăng nhập</Label>
 						</div>
 					</div>
 				</CardContent>
