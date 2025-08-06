@@ -15,6 +15,7 @@ import {
 } from "@/types/ResponseTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { logoutAction } from "@/app/actions";
 
 const BASE_URL = "https://onevnu-mobile-api.vnu.edu.vn/api";
 
@@ -496,6 +497,8 @@ export async function withAuth<T>(callback: (apiHandler: APIHandler) => Promise<
 			cookieStore.set("refreshToken", refreshToken);
 			return callback(apiHandler);
 		}
-		throw error;
+		// maybe the refresh token also expired
+		// if cant refresh, logout
+		logoutAction();
 	}
 }
