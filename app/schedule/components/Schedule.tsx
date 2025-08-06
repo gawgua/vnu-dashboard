@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from "react";
 import {
 	Select,
 	SelectContent,
@@ -26,17 +25,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { DatePicker } from "@/components/ui/date-picker";
-import Timetable from "./Timetable";
-import { toCalendar } from "@/lib/to_ical";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { BadgeQuestionMark } from "lucide-react";
-import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
-import { getScheduleFromSemester, saveCustomPeriodTime } from "../actions";
-import { defaultPeriodTime, PeriodTime } from "@/lib/constants";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
+import { BadgeQuestionMark } from "lucide-react";
+import { useState } from "react";
+import { toCalendar } from "@/lib/to_ical";
+import Timetable from "./Timetable";
+import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
+import { defaultPeriodTime, PeriodTime } from "@/lib/constants";
+import { getScheduleFromSemester, saveCustomPeriodTime } from "../actions";
 
 export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: { data: { id: string, tenHocKy: string }[], customPeriodTime?: PeriodTime[] }) {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -53,6 +53,13 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 		if (save) {
 			saveCustomPeriodTime(periodTime);
 		}
+		console.log(periodTime)
+	}
+	
+	function handleResetPeriodTime() {
+		const newPeriodTime = defaultPeriodTime.map(period => ({ ...period }));
+		setPeriodTime(newPeriodTime); // Create new objects to force re-render wtf!!!!!!!!!
+		saveCustomPeriodTime(defaultPeriodTime);
 	}
 
 	function handleExport() {
@@ -154,6 +161,9 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 										<Label>Lưu thời gian biểu đã sửa</Label>
 									</div>
 									<DialogFooter>
+										<Button className="bg-red-600 hover:bg-red-600/70" onClick={handleResetPeriodTime}>
+											Đặt lại về mặc định
+										</Button>
 										<DialogClose asChild>
 											<Button onClick={handleCustomPeriodTime}>
 												Xác nhận
