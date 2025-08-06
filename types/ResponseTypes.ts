@@ -1,3 +1,5 @@
+import { SubjectScore } from "./SubjectTypes";
+
 export interface SigninResponse {
 	accessToken: string;
 	refreshToken: string;
@@ -72,7 +74,7 @@ export interface DiemThiHocKyResponse {
     maHocPhan: string;
     soTinChi: string;
     diemHe10: string;
-    diemHeChu: string;
+    diemHeChu: SubjectScore;
     diemHe4: string;
     ketQua: string;
     idHocKy: string;

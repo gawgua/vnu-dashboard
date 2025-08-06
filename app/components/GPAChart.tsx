@@ -27,9 +27,9 @@ export default function GPAChart({data}: {
 
 	return (
 		<Card>
-			<CardContent>
+			<CardContent className="pb-0">
 				<ChartContainer config={chartConfig}>
-					<LineChart accessibilityLayer data={data} margin={{ top: 5, right: 80, left: 25 }}>
+					<LineChart accessibilityLayer data={data} margin={{ right: 80, left: 25 }}>
 						<CartesianGrid vertical={false} stroke="black" strokeDasharray="4 5" strokeWidth={0.5}/>
 						<XAxis 
 							dataKey="tenHocKy" 
@@ -42,7 +42,7 @@ export default function GPAChart({data}: {
 							tickLine={false} 
 							axisLine={false} 
 							/>
-						<ChartLegend content={<ChartLegendContent />} />
+						<ChartLegend content={<ChartLegendContent />} verticalAlign="bottom" />
 						<Line type="linear" dataKey="tongket" stroke={chartConfig.tongket.color} strokeWidth={2}>
 							<LabelList position="bottom" />
 						</Line>
