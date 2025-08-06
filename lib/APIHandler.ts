@@ -500,5 +500,6 @@ export async function withAuth<T>(callback: (apiHandler: APIHandler) => Promise<
 		// maybe the refresh token also expired
 		// if cant refresh, logout
 		logoutAction();
+		throw error;
 	}
 }
