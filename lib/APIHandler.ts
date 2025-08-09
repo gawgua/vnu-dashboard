@@ -18,6 +18,7 @@ import { redirect } from "next/navigation";
 import { logoutAction } from "@/app/actions";
 
 const BASE_URL = "https://onevnu-mobile-api.vnu.edu.vn/api";
+const USERAGENT = "Dart/3.6 (dart:io)";
 
 function fixSummerSem(danhSachHocKy: DanhSachHocKyResponse[]) {
     danhSachHocKy.forEach((hocKy) => {
@@ -58,6 +59,9 @@ export class APIHandler {
 			{
 				baseURL: BASE_URL,
 				httpsAgent: this.agent,
+				headers: {
+					"User-Agent": USERAGENT,
+				},
 			}
 		);
 		this.accessToken = response.data.accessToken;
@@ -76,6 +80,9 @@ export class APIHandler {
 				{
 					baseURL: BASE_URL,
 					httpsAgent: this.agent,
+					headers: {
+						"User-Agent": USERAGENT,
+					},
 				}
 			);
 			this.accessToken = response.data.accessToken;
@@ -95,6 +102,7 @@ export class APIHandler {
 					{
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -147,6 +155,7 @@ export class APIHandler {
 					},
 					headers: {
 						Authorization: `Bearer ${token}`,
+						"User-Agent": USERAGENT
 					},
 					baseURL: BASE_URL,
 					httpsAgent: this.agent,
@@ -176,6 +185,7 @@ export class APIHandler {
 					{
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -210,6 +220,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -245,6 +256,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -279,6 +291,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -316,6 +329,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -349,6 +363,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -383,6 +398,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -420,6 +436,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
@@ -455,6 +472,7 @@ export class APIHandler {
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,
+							"User-Agent": USERAGENT
 						},
 						baseURL: BASE_URL,
 						httpsAgent: this.agent,
