@@ -95,7 +95,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 					</SidebarMenu>
 				</SidebarHeader>
 				<Separator />
-				<SidebarContent>
+				<SidebarContent className="pl-2 pr-2">
 					<SidebarMenu>
 						{routes.map((route) => (
 							<SidebarMenuItem key={route.href}>
@@ -103,6 +103,7 @@ export default function SideBar({ isSignIn,	username }: { isSignIn: boolean, use
 									asChild
 									isActive={pathname === route.href}
 									className="hover:bg-primary"
+									tooltip={route.label}
 								>
 									<Link 
 										href={route.href}
