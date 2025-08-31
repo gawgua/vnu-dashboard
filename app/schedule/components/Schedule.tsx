@@ -37,7 +37,6 @@ import Timetable from "./Timetable";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { defaultPeriodTime, PeriodTime } from "@/lib/constants";
 import { getScheduleFromSemester, saveCustomPeriodTime } from "../actions";
-import { set } from "date-fns";
 
 export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: { data: { id: string, tenHocKy: string }[], customPeriodTime?: PeriodTime[] }) {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -191,7 +190,6 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 												min={1} max={99} step={1} 
 												value={totalWeeks} 
 												onChange={(e) => { setTotalWeeks(Number.parseInt(e.target.value)) }} 
-												className="w-16" 
 											/>
 										</div>
 									</div>
