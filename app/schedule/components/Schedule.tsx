@@ -37,6 +37,7 @@ import Timetable from "./Timetable";
 import { ThoiKhoaBieuResponse } from "@/types/ResponseTypes";
 import { defaultPeriodTime, PeriodTime } from "@/lib/constants";
 import { getScheduleFromSemester, saveCustomPeriodTime } from "../actions";
+import { set } from "date-fns";
 
 export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: { data: { id: string, tenHocKy: string }[], customPeriodTime?: PeriodTime[] }) {
 	const [loading, setLoading] = useState<boolean>(false);
@@ -45,7 +46,7 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 	const [periodTime, setPeriodTime] = useState<PeriodTime[]>(customPeriodTime);
 	const [exportOpen, setExportOpen] = useState<boolean>(false);
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
-	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+	const [totalWeeks, setTotalWeeks] = useState<number>(1);
 	const [exportError, setExportError] = useState<string | null>(null);
 	const [save, setSave] = useState<CheckedState>(false);
 
@@ -64,12 +65,12 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 
 	function handleExport() {
 		setExportError(null);
-		if (!startDate || !endDate || startDate >= endDate) {
+		if (!startDate) {
 			setExportError("Vui lòng chọn ngày bắt đầu và kết thúc học kỳ hợp lệ.");
 			return;
 		}
 		try {
-			const icsContent = toCalendar(currentHocKy!, startDate, endDate, periodTime);
+			const icsContent = toCalendar(currentHocKy!, startDate, totalWeeks, periodTime);
 			
 			// Create blob and download
 			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
@@ -178,15 +179,20 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 										Xuất thời khóa biểu
 									</Button>
 								</PopoverTrigger>
-								<PopoverContent className="w-full p-4 space-y-4" align="start">
+							<PopoverContent className="max-w-xs p-4 space-y-4" align="start">
 									<div className="grid grid-cols-2 gap-4">
 										<div className="space-y-2 w-full">
 											<Label>Ngày bắt đầu học kì</Label>
 											<DatePicker date={startDate} setDate={setStartDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
 										</div>
 										<div className="space-y-2 w-full">
-											<Label>Ngày kết thúc học kì</Label>
-											<DatePicker date={endDate} setDate={setEndDate} className="border-1 border-gray-200 text-black bg-transparent hover:bg-green-200 w-full justify-between" />
+											<Label>Số tuần học</Label>
+											<Input type="number" 
+												min={1} max={99} step={1} 
+												value={totalWeeks} 
+												onChange={(e) => { setTotalWeeks(Number.parseInt(e.target.value)) }} 
+												className="w-16" 
+											/>
 										</div>
 									</div>
 									{exportError && (
@@ -194,7 +200,7 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 											{exportError}
 										</div>
 									)}
-									<Button onClick={handleExport} className="w-full">Xuất</Button>
+									<Button onClick={handleExport} className="w-full max-w-xs mx-auto">Xuất</Button>
 								</PopoverContent>
 							</Popover>
 							<Tooltip>
