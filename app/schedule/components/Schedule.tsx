@@ -179,7 +179,7 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 										Xuất thời khóa biểu
 									</Button>
 								</PopoverTrigger>
-							<PopoverContent className="max-w-xs p-4 space-y-4" align="start">
+								<PopoverContent className="w-full p-4 space-y-4" align="start">
 									<div className="grid grid-cols-2 gap-4">
 										<div className="space-y-2 w-full">
 											<Label>Ngày bắt đầu học kì</Label>
@@ -200,7 +200,7 @@ export default function Schedule({ data, customPeriodTime = defaultPeriodTime}: 
 											{exportError}
 										</div>
 									)}
-									<Button onClick={handleExport} className="w-full max-w-xs mx-auto">Xuất</Button>
+									<Button onClick={handleExport} className="w-full">Xuất</Button>
 								</PopoverContent>
 							</Popover>
 							<Tooltip>
