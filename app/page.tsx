@@ -63,16 +63,16 @@ export default async function HomePage() {
 			[SubjectScore.F]: 0
 		};
 		for (const hocKy of danhSachHocKy) {
-			const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
-			const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
-			diemHocKy.forEach((diem) => {
-				subjectScoreCount[diem.diemHeChu] += 1;
-			});
+			// const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
+			// const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
+			// diemHocKy.forEach((diem) => {
+			// 	subjectScoreCount[diem.diemHeChu] += 1;
+			// });
 			gpaTongKet.push({
 				id: hocKy.id,
 				tenHocKy: `Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`,
-				tongket: Number.parseFloat(tongket.diemTrungBinhHe4_HocKy),
-				tichluy: Number.parseFloat(tongket.diemTrungBinhHe4_TichLuyDenHocKyHienTai)
+				tongket: 0, //Number.parseFloat(tongket.diemTrungBinhHe4_HocKy),
+				tichluy: 0 //Number.parseFloat(tongket.diemTrungBinhHe4_TichLuyDenHocKyHienTai)
 			});
 		}
 		gpaTongKet.sort((a, b) => Number(a.id) - Number(b.id));
@@ -105,7 +105,7 @@ export default async function HomePage() {
 			</Card>
 			<Card className="bg-primary text-white font-semibold p-1.5 border-0">
 				<CardContent className="flex items-center justify-center space-x-20">
-					<div>Số kỳ đã học: {tongket.soKyDaHoc}</div>
+					<div>Số kỳ đã học: 0</div>
 					<Separator orientation="vertical" className="min-h-10" />
 					<div>Điểm trung bình tích lũy: {tongket.diemTrungBinhHe4TichLuy}</div>
 					<Separator orientation="vertical" className="min-h-10"/>
