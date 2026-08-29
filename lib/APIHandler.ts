@@ -22,14 +22,8 @@ const USERAGENT = "Dart/3.6 (dart:io)";
 
 function fixSummerSem(danhSachHocKy: DanhSachHocKyResponse[]) {
     danhSachHocKy.forEach((hocKy) => {
-        if (hocKy.ten === "2"){
-            const l = danhSachHocKy.filter(hk => hk.nam === hocKy.nam);
-            if (l.length > 2) {
-                const id = l.map((hk) => Number(hk.id));
-                if (Number(hocKy.id) === Math.max(...id)) {
-                    hocKy.ten = "Hè";
-                }
-            }
+        if (hocKy.loaiHocKy === "HE_PHU"){
+            hocKy.ten = "Hè";
         }
     });
 }
@@ -469,6 +463,7 @@ export class APIHandler {
 						params: {
 							idHocKy: hocKyId,
 							kieuTruong: "TruongChinh",
+							isTheoChuongTrinhDaoTao: "1",
 						},
 						headers: {
 							Authorization: `Bearer ${token}`,

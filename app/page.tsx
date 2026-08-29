@@ -36,8 +36,7 @@ const donViLogo: Record<string, StaticImageData> = {
 }
 
 export default async function HomePage() {
-	const { tongket, gpaTongKet, svInfo, classData, subjectScoreCount } = await withAuth(async (apiHandler: APIHandler) => {
-		const tongket = (await apiHandler.getTongKetDenHienTai())[0];
+	const { gpaTongKet, svInfo, classData, subjectScoreCount } = await withAuth(async (apiHandler: APIHandler) => {
 		const svInfo = await apiHandler.getInfoSinhVien();
 		const classData = (await apiHandler.getDataLopDaoTao(
 			svInfo.idLopDaoTao,
@@ -63,22 +62,23 @@ export default async function HomePage() {
 			[SubjectScore.F]: 0
 		};
 		for (const hocKy of danhSachHocKy) {
-			// const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
-			// const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
-			// diemHocKy.forEach((diem) => {
-			// 	subjectScoreCount[diem.diemHeChu] += 1;
-			// });
+			const tongket = (await apiHandler.getDiemTrungBinhHocKy(hocKy.id))[0];
+			const diemHocKy = await apiHandler.getDiemThiHocKy(hocKy.id);
+			diemHocKy.forEach((diem) => {
+				subjectScoreCount[diem.diemHeChu] += 1;
+			});
 			gpaTongKet.push({
 				id: hocKy.id,
 				tenHocKy: `Học kỳ ${hocKy.ten} năm học ${hocKy.nam}`,
-				tongket: 0, //Number.parseFloat(tongket.diemTrungBinhHe4_HocKy),
-				tichluy: 0 //Number.parseFloat(tongket.diemTrungBinhHe4_TichLuyDenHocKyHienTai)
+				tongket: Number.parseFloat(tongket.diemTrungBinhHe4_HocKy),
+				tichluy: Number.parseFloat(tongket.diemTrungBinhHe4_TichLuyDenHocKyHienTai),
+				tinchi: Number.parseInt(tongket.tongSoTinChiTichLuy_HocKy),
+				tinChiTichLuy: Number.parseInt(tongket.tongSoTinChiTichLuy_TichLuyDenHocKyHienTai),
 			});
 		}
 		gpaTongKet.sort((a, b) => Number(a.id) - Number(b.id));
 
 		return {
-			tongket,
 			svInfo,
 			classData,
 			gpaTongKet,
@@ -105,11 +105,11 @@ export default async function HomePage() {
 			</Card>
 			<Card className="bg-primary text-white font-semibold p-1.5 border-0">
 				<CardContent className="flex items-center justify-center space-x-20">
-					<div>Số kỳ đã học: 0</div>
+					<div>Số kỳ đã học: {gpaTongKet.length}</div>
 					<Separator orientation="vertical" className="min-h-10" />
-					<div>Điểm trung bình tích lũy: {tongket.diemTrungBinhHe4TichLuy}</div>
+					<div>Điểm trung bình tích lũy: {gpaTongKet[gpaTongKet.length - 1]?.tichluy.toFixed(2) || 0}</div>
 					<Separator orientation="vertical" className="min-h-10"/>
-					<div>Tín chỉ tích lũy: {tongket.tongSoTinChiTichLuy}</div>
+					<div>Tín chỉ tích lũy: {gpaTongKet[gpaTongKet.length - 1]?.tinChiTichLuy || 0}</div>
 				</CardContent>
 			</Card>
 			<div className="flex gap-3">

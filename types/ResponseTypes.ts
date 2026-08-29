@@ -32,9 +32,14 @@ export interface LopDaoTaoResponse {
     tenVietTat: string;
 }
 export interface DanhSachHocKyResponse {
-	id: string;
-	ten: string;
-	nam: string;
+    id: string;
+    loaiHocKy: string;
+    maHocKy: string;
+    nam: string;
+    ngayBatDau: null;
+    ngayKetThuc: string;
+    preTerm: null;
+    ten: string;
 }
 
 export interface ThoiKhoaBieuResponse {
