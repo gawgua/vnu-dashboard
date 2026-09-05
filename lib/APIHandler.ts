@@ -15,7 +15,6 @@ import {
 } from "@/types/ResponseTypes";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { logoutAction } from "@/app/actions";
 
 const BASE_URL = "https://onevnu-mobile-api.vnu.edu.vn/api";
 const USERAGENT = "Dart/3.6 (dart:io)";
@@ -502,17 +501,29 @@ export async function withAuth<T>(callback: (apiHandler: APIHandler) => Promise<
 	
 	const apiHandler = new APIHandler(accessToken, refreshToken);
 	try {
-		return callback(apiHandler);
+		return await callback(apiHandler);
 	} catch (error) {
-		if (error instanceof AxiosError &&  error.status === 401 && remember) {
-			const {accessToken, refreshToken} = await apiHandler.refreshtoken();
-			cookieStore.set("accessToken", accessToken);
-			cookieStore.set("refreshToken", refreshToken);
-			return callback(apiHandler);
+		if (error instanceof AxiosError && error.status === 401 && remember) {
+			try {
+				const { accessToken, refreshToken } = await apiHandler.refreshtoken();
+				try {
+					cookieStore.set("accessToken", accessToken);
+					cookieStore.set("refreshToken", refreshToken);
+				} catch {
+					// cookies() can only be mutated inside a Server Action or Route
+					// Handler; when withAuth runs during a Server Component render
+					// (e.g. a page.tsx), persisting the new tokens is not possible.
+					// The refreshed apiHandler instance still holds the new tokens
+					// in memory, so the current request can proceed normally.
+				}
+				return await callback(apiHandler);
+			} catch {
+				// refresh token is also expired/invalid, force a logout
+				redirect("/logout");
+			}
 		}
 		// maybe the refresh token also expired
 		// if cant refresh, logout
-		logoutAction();
-		throw error;
+		redirect("/logout");
 	}
 }
